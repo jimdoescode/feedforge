@@ -76,15 +76,22 @@ class MY_Parser extends CI_Parser
             $count = count($entries);
             error_log(print_r($entries, true));
             error_log(print_r($tagdata, true));
+            error_log(print_r($types, true));
             for($i=0; $i < $count; $i++)
             {
                 $template .= $segment;
                 foreach($entries[$i] as $key => $val)
                 {
+                    //If we don't have any tag data then ignore this tag.
                     if(!array_key_exists($key, $tagdata))continue;
-                    //$this->ci->load->library($types[$key], null, 'format');
-                    //$this->ci->format->render_external($val);
-                    $template = str_replace($tagdata[$key], $entries[$i][$key], $template);
+                    //If we have a type then we will display the value from it.
+                    if(array_key_exists($key, $types))
+                    {
+                        $this->ci->load->library('field_types/'.$types[$key], null, 'format');
+                        if(is_array($tagdata[$key]))$val = $this->ci->format->display($val, $tagdata[$key][1]);
+                        else $val = $this->ci->format->display($val);
+                    }
+                    $template = str_replace($tagdata[$key], $val, $template);
                 }
             }
         }

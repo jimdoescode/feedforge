@@ -22,6 +22,13 @@ class Feed_model extends CI_Model
         return false;
     }
     
+    private function _get_field_type($id)
+    {
+        $query = $this->db->select('library')->where('id', $id)->get('feed_field_type');
+        if($query->num_rows() > 0)return $this->row()->library;
+        return false;
+    }
+    
     function create_feed($title)
     {
         $short = $this->_get_url_title($title);
@@ -51,20 +58,25 @@ class Feed_model extends CI_Model
     function add_feed_field($feedid, $title, $typeid)
     {
         $feedshort = $this->_get_short($feedid, 'feed');
+        $typelib = $this->_get_field_type($typeid);
         $fieldshort = $this->_get_url_title($title);
         
         $this->db->insert('feed_field', array('feed_id'=>$feedid, 'short'=>$short, 'title'=>$title, 'feed_field_type_id'=>$typeid));
-        $this->dbforge->add_column($feedshort, array($fieldshort => array('type'=>'VARCHAR','constraint'=>512)));//TODO Make the type determines by the feed_field_type somehow
+        $this->load->library('field_types/'.$typelib, null, 'field');
+        $this->dbforge->add_column($feedshort, array($fieldshort => $this->field->get_database_column_type()));
     }
     
     function update_feed_field($feedid, $fieldid, $title, $typeid)
     {
         $feedshort = $this->_get_short($feedid, 'feed');
         $fieldshort = $this->_get_short($fieldid, 'feed_field');
+        $typelib = $this->_get_field_type($typeid);
         $newshort = $this->_get_url_title($title);
         
         $this->db->update('feed_field', array('title'=>$title, 'short'=>$newshort, 'feed_field_type_id'=>$typeid), array('id'=>$fieldid));
-        $this->dbforge->modify_column($feedshort, array($fieldshort=>array('name'=>$fieldshort)));
+        $this->load->library('field_types/'.$typelib, null, 'field');
+        $fielddata = array_merge($this->field->get_database_column_type(), array('name'=>$fieldshort));
+        $this->dbforge->modify_column($feedshort, array($fieldshort=>$fielddata));
     }
     
     function delete_feed_field($feedid, $fieldid)
