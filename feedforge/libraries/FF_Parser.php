@@ -1,11 +1,8 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class MY_Parser extends CI_Parser
+class FF_Parser extends CI_Parser
 {
-    private $keys = 'id';
-    private $template_directory = 'templates/';
-    
-    function __construct($params)
+    function __construct()
     {
         $this->ci = get_instance();
         $this->ci->load->model('feed_model');
@@ -13,8 +10,11 @@ class MY_Parser extends CI_Parser
     
     function parse_template($path, $globals = array(), $merged = false)
     {
-        //Get the initial file
-        $template = $this->ci->load->file($this->template_directory.$path.EXT, true);
+        //Build the full path to the template and make sure it exists.
+        $fullpath = TEMPPATH.$path.EXT;
+        if(!file_exists($fullpath))return false;
+        //Get the initial file.
+        $template = $this->ci->load->file($fullpath, true);
         //Fill in any global variables from a merge call
         if($merged)$template = $this->_parse_globals($template, $globals, 'merge:');
         //Fill in any templates that are merged into this one
@@ -27,11 +27,11 @@ class MY_Parser extends CI_Parser
         return $template;
     }
     
-    private function _parse_globals($template, $globals, $pre = 'global:')
+    private function _parse_globals($template, $globals, $pre = 'ff:global')
     {
         $globalArray = array();
         foreach($globals as $key => $val)
-            $globalArray[$pre.$key] = $val;
+            $globalArray[$pre.'="'.$key.'"'] = $val;
         
         $template = $this->parse_string($template, $globalArray, true);
         return $template;
@@ -46,7 +46,7 @@ class MY_Parser extends CI_Parser
         {
             $params = $this->_get_params($mergedata[2][$i]);
             $subtemplate = $this->parse_template($mergedata[1][$i], $params, true);
-            $template = str_replace($mergedata[0][$i], $subtemplate, $template);
+            if($subtemplate !== false)$template = str_replace($mergedata[0][$i], $subtemplate, $template);
         }
         return $template;
     }
@@ -74,9 +74,6 @@ class MY_Parser extends CI_Parser
         if($entries !== false)
         {
             $count = count($entries);
-            error_log(print_r($entries, true));
-            error_log(print_r($tagdata, true));
-            error_log(print_r($types, true));
             for($i=0; $i < $count; $i++)
             {
                 $template .= $segment;

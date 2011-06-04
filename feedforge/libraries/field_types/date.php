@@ -1,11 +1,11 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 //This library will do processing on date fields
-class date implements field_type
+class date
 {
     public function __construct()
     {
-        $this->CI = get_instance();    
+        $this->ci = get_instance();    
     }
     
     public function get_database_column_type()
@@ -15,13 +15,13 @@ class date implements field_type
     
     public function display_admin($name, $value)
     {
-        $this->CI->load->helper('form');
+        $this->ci->load->helper('form');
         form_input(array('name'=>$name, 'value'=>$value));
     }
     
     public function display($value, $params = array())
     {
-        $this->CI->load->helper('date');
+        $this->ci->load->helper('date');
         if(array_key_exists('format', $params))$value = mdate($params['format'], $value);
         return $value;
     }

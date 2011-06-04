@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "feedforge";
+$route['default_controller'] = 'feedforge';
 $route['404_override'] = '';
 
 $route['admin'] = 'admin';
