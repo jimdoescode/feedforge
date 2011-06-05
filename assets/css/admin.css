@@ -1,0 +1,104 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, 
+small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+    background: transparent;
+    border: 0;
+    font-size: 100%;
+    margin: 0;
+    outline: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+a {
+	text-decoration: none;
+	color: #0086b3;
+	font: 16px bold Arial, Helvetica, sans-serif;
+}
+a:hover {text-decoration: underline;}
+article.column {
+	width: 300px;
+	min-height: 300px;
+	margin-right: 30px;
+	color: #444;
+}
+article.column-last {margin-right: 0;}
+footer {
+	padding: 20px 0;
+	border-top: 3px solid #ddd;
+	margin-top: 20px;
+}
+h1 {font: 28px Arial, Helvetica, sans-serif;}
+h2 {
+	font: 20px Arial, Helvetica, sans-serif;
+	border-bottom: 1px dashed #ddd;
+}
+header {
+	padding-top: 6px;
+	border-bottom: 3px solid #ddd;
+	margin-bottom: 20px;
+	overflow: hidden;
+}
+	header a {
+		color: #0086b3;
+		font-size: 19px;
+	}
+p {
+    margin: 15px 0;
+    font: 16px Georgia, "Times New Roman", serif;
+    line-height: 25px;
+    color: #444;
+}
+section {
+	width: 960px;
+    margin: auto;
+    overflow: hidden;
+}
+ul {list-style-type: none;}
+#logo {text-align: middle;}
+#main {min-height: 500px;}
+	#main .fade {
+		padding: 20px;
+		background-color: #fff;
+		border-radius: 3px;
+	}
+#nav {
+	overflow: hidden;
+	float: right;
+	margin-top: 14px;
+}
+	#nav li {
+		font: 16px Georgia, "Times New Roman", serif;
+		float: left;
+		display: inline;
+		color: #444;
+	}
+	#nav li.spacer {margin: 0 10px;}
+.internal {
+	min-height: 380px;
+	margin-bottom: 10px;
+	padding: 10px;
+}
+.column {
+	float: left;
+	display: inline;
+}
+.error {background-color: #f03c00;}
+.purple {background-color: #b30086;}
+.purple-text {color: #b30086;}
+.purple-border {
+	border: 10px solid #b30086;
+	border-radius: 5px;
+}
+.green {background-color: #86b300;}
+.green-text {color: #86b300;}
+.green-border {
+	border: 10px solid #86b300;
+	border-radius: 5px;
+}
+.blue {background-color: #0086b3;}
+.blue-text {color: #0086b3;}
+.blue-border {
+	border: 10px solid #0086b3;
+	border-radius: 5px;
+}

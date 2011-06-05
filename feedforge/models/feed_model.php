@@ -29,6 +29,13 @@ class Feed_model extends CI_Model
         return false;
     }
     
+    function get_feeds()
+    {
+        $query = $this->db->get('feed');
+        if($query->num_rows() > 0)return $query->result_array();
+        return false;
+    }
+    
     function create_feed($title)
     {
         $short = $this->_get_url_title($title);
