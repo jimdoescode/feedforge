@@ -4,16 +4,11 @@
     <title>Feed Forge Admin: <?=$title;?></title>
     <meta charset="utf-8"/>
     <link rel="stylesheet" type="text/css" href="<?=site_url('assets/css/admin.css');?>"/>
-    <link rel="stylesheet" type="text/css" href="<?=site_url('assets/css/jquery.gritter.css');?>" media="screen"/>
     <script type="text/javascript">
-	var SITE = "<?=site_url();?>";
-	var MESSAGES = [<?php
-    foreach($messages as $message)
-	echo "{title: '{$message['title']}', text: '{$message['text']}'},";
-?>];
+	var SITE = '<?=site_url();?>';
     </script>
     <script type="text/javascript" src="<?=site_url('assets/js/jquery.min.js');?>"></script>
-    <script type="text/javascript" src="<?=site_url('assets/js/jquery.gritter.min.js');?>"></script>
+    <script type="text/javascript" src="<?=site_url('assets/js/admin.js');?>"></script>
 </head>
 <body>
     <section>

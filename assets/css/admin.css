@@ -24,9 +24,9 @@ article.column {
 }
 article.column-last {margin-right: 0;}
 footer {
-	padding: 20px 0;
+	padding: 15px 0;
 	border-top: 3px solid #ddd;
-	margin-top: 20px;
+	margin-top: 30px;
 }
 h1 {font: 28px Arial, Helvetica, sans-serif;}
 h2 {
@@ -34,9 +34,9 @@ h2 {
 	border-bottom: 1px dashed #ddd;
 }
 header {
-	padding-top: 6px;
+	padding: 15px 0;
 	border-bottom: 3px solid #ddd;
-	margin-bottom: 20px;
+	margin-bottom: 15px;
 	overflow: hidden;
 }
 	header a {
@@ -54,6 +54,24 @@ section {
     margin: auto;
     overflow: hidden;
 }
+table {
+	
+	border-collapse: collapse;
+	width: 100%;
+}
+	table thead {font: 16px bold Arial, Helvetica, sans-serif;}
+		table tbody tr {border-top: 1px solid #ddd;}
+		table thead th,
+		table tbody td {
+			text-align: left;
+			vertical-align: middle;
+			padding: 10px;
+		}
+	table .small {width: 50px;}
+	table .medium {width: 100px;}
+	table .large {width: 250px;}
+	table .center {text-align: center;}
+	table .right {text-align: right;}
 ul {list-style-type: none;}
 #logo {text-align: middle;}
 #main {min-height: 500px;}
@@ -75,9 +93,9 @@ ul {list-style-type: none;}
 	}
 	#nav li.spacer {margin: 0 10px;}
 .internal {
-	min-height: 380px;
-	margin-bottom: 10px;
-	padding: 10px;
+	min-height: 400px;
+	margin-bottom: 15px;
+	padding: 15px;
 }
 .column {
 	float: left;
@@ -101,4 +119,8 @@ ul {list-style-type: none;}
 .blue-border {
 	border: 10px solid #0086b3;
 	border-radius: 5px;
+}
+.table-border {
+	padding: 15px;
+	margin: 15px 0;
 }

@@ -42,6 +42,7 @@ $route['default_controller'] = 'feedforge';
 $route['404_override'] = '';
 
 $route['admin'] = 'admin';
+$route['admin/(:any)'] = 'admin/$1';
 $route[':any'] = 'feedforge/execute';
 
 /* End of file routes.php */

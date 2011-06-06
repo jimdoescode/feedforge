@@ -10,15 +10,14 @@ class Feed_model extends CI_Model
     
     private function _get_url_title($title)
     {
-        $this->load->helper('url');
-        $separator = $this->config->load('separator');
+        $separator = $this->config->item('separator');
         return url_title($title, $separator, true);
     }
     
     private function _get_short($id, $table)
     {
         $query = $this->db->select('short')->where('id', $id)->get($table);
-        if($query->num_rows() > 0)return $this->row()->short;
+        if($query->num_rows() > 0)return $query->row()->short;
         return false;
     }
     
@@ -26,6 +25,13 @@ class Feed_model extends CI_Model
     {
         $query = $this->db->select('library')->where('id', $id)->get('feed_field_type');
         if($query->num_rows() > 0)return $this->row()->library;
+        return false;
+    }
+    
+    function get_feed($feedid)
+    {
+        $query = $this->db->get_where('feed', array('id'=>$feedid));
+        if($query->num_rows() > 0)return $query->row_array();
         return false;
     }
     
@@ -50,16 +56,28 @@ class Feed_model extends CI_Model
         $feedshort = $this->_get_short($feedid, 'feed');
         $newshort = $this->_get_url_title($title);
         
-        $this->db->update('feed', array('title'=>$title, 'short'=>$newshort), array('id' => $feedid));
-        $this->dbforge->rename_table($feedshort, $newshort);
+        if($feedshort != $newshort)
+        {
+            $this->db->update('feed', array('title'=>$title, 'short'=>$newshort), array('id' => $feedid));
+            $this->dbforge->rename_table($feedshort, $newshort);
+        }
     }
     
     function delete_feed($feedid)
     {
         $feedshort = $this->_get_short($feedid, 'feed');
         
-        $this->db->delete('feed', array('id'=>$fieldid));
+        $this->db->delete('feed', array('id'=>$feedid));
+        $this->db->delete('feed_field', array('feed_id'=>$feedid));
         $this->dbforge->drop_table($feedshort);
+    }
+    
+    function get_feed_fields($feedid)
+    {
+        $sql = 'SELECT ff.*, fft.title AS type_name FROM feed_field ff, feed_field_type fft WHERE ff.feed_id=? AND fft.id=ff.feed_field_type_id';
+        $query = $this->db->query($sql, array($feedid));
+        if($query->num_rows() > 0)return $query->result_array();
+        return false;
     }
     
     function add_feed_field($feedid, $title, $typeid)
