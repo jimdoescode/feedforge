@@ -2,8 +2,6 @@
 
 class Admin extends CI_Controller
 {
-    private $messages = array();
-    
     function __construct()
     {
         parent::__construct();
@@ -16,14 +14,7 @@ class Admin extends CI_Controller
     
     private function _render($title, $page)
     {
-        $messages = $this->messages;
-        $this->messages = array();
-        $this->load->view('admin_template', array('title'=>$title, 'page'=>$page, 'messages'=>$this->messages));
-    }
-    
-    private function _queue_message($title, $message)
-    {
-        array_push($this->messages, array('title'=>$title, 'text'=>$message));
+        $this->load->view('admin_template', array('title'=>$title, 'page'=>$page));
     }
     
     function index()
@@ -45,27 +36,14 @@ class Admin extends CI_Controller
         $this->_render('Feeds', $this->load->view('admin_feeds', array('feeds'=>$feeds), true));
     }
     
-    function feed_fields($feedid)
-    {
-        $feed = $this->feed_model->get_feed($feedid);
-        $fields = $this->feed_model->get_feed_fields($feedid);
-        if($fields === false)$fields = array();
-        $this->_render('Feed Fields', $this->load->view('admin_feed_fields', array('name'=>$feed['title'], 'fields'=>$fields), true));
-    }
-    
-    function add_feed()
-    {
-        $title = $this->input->post('title');
-        $this->feed_model->create_feed($title);
-        header('application/json');
-        echo $this->get_feed_data();
-    }
-    
-    function update_feed()
+    function modify_feeds()
     {
         $feedid = $this->input->post('id');
         $title = $this->input->post('title');
-        $this->feed_model->update_feed($feedid, $title);
+        
+        if($feedid > 0)$this->feed_model->update_feed($feedid, $title);
+        else $this->feed_model->create_feed($title);
+        
         header('application/json');
         echo $this->get_feed_data();
     }
@@ -76,6 +54,30 @@ class Admin extends CI_Controller
         $this->feed_model->delete_feed($feedid);
         header('application/json');
         echo $this->get_feed_data();
+    }
+    
+    function feed_fields($feedid)
+    {
+        $feed = $this->feed_model->get_feed($feedid);
+        $fields = $this->feed_model->get_feed_fields($feedid);
+        $types = $this->feed_model->get_field_types();
+        if($fields === false)$fields = array();
+        $this->_render('Feed Fields', $this->load->view('admin_feed_fields', array('feed'=>$feed, 'types'=>$types, 'fields'=>$fields), true));
+    }
+    
+    function add_feed_field($feedid)
+    {
+        
+    }
+    
+    function update_feed_field()
+    {
+        
+    }
+    
+    function delete_feed_field()
+    {
+        
     }
     
     function entries($feedshort)

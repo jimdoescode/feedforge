@@ -113,6 +113,13 @@ class Feed_model extends CI_Model
         $this->dbforge->drop_column($feedshort, $fieldshort);
     }
     
+    function get_field_types()
+    {
+        $query = $this->db->get('feed_field_type');
+        if($query->num_rows() > 0)return $query->result_array();
+        return false;
+    }
+    
     function add_feed_entry($feedid, $entrydata)
     {
         $feedshort = $this->_get_short($feedid, 'feed');
@@ -136,14 +143,15 @@ class Feed_model extends CI_Model
         $sql = 'SELECT ff.short, fft.library FROM feed f, feed_field ff, feed_field_type fft WHERE f.short=? AND ff.feed_id=f.id AND fft.id=ff.feed_field_type_id';
         $query = $this->db->query($sql, array($feedshort));
         
-        $types = array();
         if($query->num_rows() > 0)
         {
+            $types = array();
             $results = $query->result_array();
             foreach($results as $result)
                 $types[$result['short']] = $result['library'];
+            return $types;
         }
-        return $types;
+        return false;
     }
     
     function get_feed_entries($feedshort, $options = array(), $limit = 30, $offset = 0)

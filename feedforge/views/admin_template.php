@@ -3,17 +3,19 @@
 <head>
     <title>Feed Forge Admin: <?=$title;?></title>
     <meta charset="utf-8"/>
-    <link rel="stylesheet" type="text/css" href="<?=site_url('assets/css/admin.css');?>"/>
+    <link rel="stylesheet" type="text/css" href="<?=site_url('assets/admin/admin.css');?>"/>
+	<link rel="stylesheet" type="text/css" href="<?=site_url('assets/admin/fancybox/jquery.fancybox.css');?>" media="screen"/>
     <script type="text/javascript">
 	var SITE = '<?=site_url();?>';
     </script>
-    <script type="text/javascript" src="<?=site_url('assets/js/jquery.min.js');?>"></script>
-    <script type="text/javascript" src="<?=site_url('assets/js/admin.js');?>"></script>
+    <script type="text/javascript" src="<?=site_url('assets/admin/jquery.min.js');?>"></script>
+	<script type="text/javascript" src="<?=site_url('assets/admin/fancybox/jquery.fancybox.pack.js');?>"></script>
+    <script type="text/javascript" src="<?=site_url('assets/admin/admin.js');?>"></script>
 </head>
 <body>
     <section>
         <header>
-            <img id="logo" src="<?=site_url('assets/images/admin/logo.png');?>" alt=''/>
+            <img id="logo" src="<?=site_url('assets/admin/logo.png');?>" alt=''/>
             <ul id="nav">
                 <li><a href="<?=site_url('admin/feeds');?>" title="">Feeds</a></li>
                 <li class='spacer'>/</li>

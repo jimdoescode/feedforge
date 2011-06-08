@@ -15,7 +15,7 @@
 			{/ff:feed}
 		</p>
 	</div>
-	<a href='#' class='blue-text' title=''>Add/Edit Feeds &raquo;</a>
+	<a href='<?=site_url('admin/feeds');?>' class='blue-text' title=''>Add/Edit Feeds &raquo;</a>
 </article>
 
 <article class='column'>

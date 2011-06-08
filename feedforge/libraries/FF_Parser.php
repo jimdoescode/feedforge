@@ -69,26 +69,29 @@ class FF_Parser extends CI_Parser
     private function _parse_feed_tags($feed, $feedparams, $tagdata, $segment)
     {
         $types = $this->ci->feed_model->get_feed_entry_types($feed);
-        $entries = $this->ci->feed_model->get_feed_entries($feed);
         $template = '';
-        if($entries !== false)
+        if($types !== false)
         {
-            $count = count($entries);
-            for($i=0; $i < $count; $i++)
+            $entries = $this->ci->feed_model->get_feed_entries($feed);
+            if($entries !== false)
             {
-                $template .= $segment;
-                foreach($entries[$i] as $key => $val)
+                $count = count($entries);
+                for($i=0; $i < $count; $i++)
                 {
-                    //If we don't have any tag data then ignore this tag.
-                    if(!array_key_exists($key, $tagdata))continue;
-                    //If we have a type then we will display the value from it.
-                    if(array_key_exists($key, $types))
+                    $template .= $segment;
+                    foreach($entries[$i] as $key => $val)
                     {
-                        $this->ci->load->library('field_types/'.$types[$key], null, 'format');
-                        if(is_array($tagdata[$key]))$val = $this->ci->format->display($val, $tagdata[$key][1]);
-                        else $val = $this->ci->format->display($val);
+                        //If we don't have any tag data then ignore this tag.
+                        if(!array_key_exists($key, $tagdata))continue;
+                        //If we have a type then we will display the value from it.
+                        if(array_key_exists($key, $types))
+                        {
+                            $this->ci->load->library('field_types/'.$types[$key], null, 'format');
+                            if(is_array($tagdata[$key]))$val = $this->ci->format->display($val, $tagdata[$key][1]);
+                            else $val = $this->ci->format->display($val);
+                        }
+                        $template = str_replace($tagdata[$key], $val, $template);
                     }
-                    $template = str_replace($tagdata[$key], $val, $template);
                 }
             }
         }
