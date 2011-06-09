@@ -27,21 +27,45 @@ function delete_feed(id)
 	return false;
 }
 
-function edit_feed_field(id, title, type)
+function refresh_field_list(response)
 {
-	$('#fieldtitle').val(title);
-	$('#fieldid').val(id);
-	$('#fieldtype').val(type);
+	console.log(response);
+	var tbl = $('table tbody');
+	tbl.text('');
+	var feed = response.feed;
+	var fields = response.fields;
 	
+	var count = fields.length;
+	var rows = '';
+	
+	for(var i=0; i < count; i++)
+		rows += '<tr><td class="center"><a href="#" title="Edit" onclick="return edit_feed_field('+feed['id']+', '+fields[i]['id']+', \''+fields[i]['title']+'\', '+fields[i]['feed_field_type_id']+');">(E)</a>&nbsp;&nbsp;<a href="#" title="Delete" onclick="return delete_field('+feed['id']+', '+fields[i]['id']+');">(X)</a></td><td>'+fields[i]['short']+'</td><td>'+fields[i]['title']+'</td><td>'+fields[i]['type_name']+'</td></tr>';
+	if(count == 0)rows += '<tr><td colspan="4">No Fields Found</td></tr>';
+	
+	tbl.html(rows);
+}
+
+function edit_feed_field(feedid, fieldid, title, type)
+{
+	$('#feedid').val(feedid);
+	$('#fieldtitle').val(title);
+	$('#fieldid').val(fieldid);
+	$('#fieldtype').val(type);
 	$('a.fb_link').click();
+}
+
+function delete_field(feedid, fieldid)
+{
+	if(confirm("Are you sure you want to delete this field?"))$.post(SITE+'admin/delete_feed_field/'+feedid, {id: fieldid}, refresh_field_list, 'json');
+	return false;
 }
 
 function reset_inputs(elmid)
 {
-	$(elmid+' input[type="text"]').val('');
-	$(elmid+' input[type="hidden"]').val(0);
+	$(elmid+' input[type="text"]').not(':disabled').val('');
+	$(elmid+' input[type="hidden"]').not(':disabled').val(0);
+	$(elmid+' select').val('');
 }
-
 
 $(document).ready(function() 
 {
@@ -50,17 +74,40 @@ $(document).ready(function()
 	{
 		'scrolling'	: 'no',
 		'titleShow'	: false,
-		'showCloseButton'	: false,
+		'showCloseButton' : false,
+		'centerOnScroll'  : true,
 		'onClosed'	: function() {reset_inputs(fbl.attr('href'));}
 	});
 	
 	$('#modify_feeds').submit(function()
 	{
-		var title = $('#feedtitle').val();
-		var id = $('#feedid').val();
-		$.post(SITE+"admin/modify_feeds", {id: id, title: title}, refresh_feed_list, 'json');
-		$.fancybox.close();
+		var title = $.trim($('#feedtitle').val());
+		if(title.length > 0)
+		{
+			var id = $('#feedid').val();
+			$.post(SITE+"admin/modify_feeds", {id: id, title: title}, refresh_feed_list, 'json');
+			$.fancybox.close();
+		}
+		else alert("A title is required for a feed.");
+		
 		return false;
 	});
 	
+	$('#modify_feed_fields').submit(function()
+	{
+		var title = $.trim($('#fieldtitle').val());
+		var type = $.trim($('#fieldtype').val());
+		
+		if(title.length > 0 && type.length > 0)
+		{
+			var feedid = $('#feedid').val();
+			var fieldid = $('#fieldid').val();
+			$.post(SITE+"admin/modify_feed_fields/"+feedid, {id: fieldid, title: title, type: type}, refresh_field_list, 'json');
+			$.fancybox.close();
+		}
+		else if(title.length <= 0)alert("A title is required for a feed field.");
+		else alert("A field type is required for a feed field.");
+		
+		return false;
+	});
 });

@@ -101,23 +101,24 @@ ul {list-style-type: none;}
 	float: left;
 	display: inline;
 }
-.error {background-color: #f03c00;}
-.purple {background-color: #b30086;}
-.purple-text {color: #b30086;}
-.purple-border {
-	border: 10px solid #b30086;
+.blue {background-color: #0086b3;}
+.blue-text {color: #0086b3;}
+.blue-border {
+	border: 10px solid #0086b3;
 	border-radius: 5px;
 }
+.error {background-color: #f03c00;}
+.fancy-form {width: 320px;}
 .green {background-color: #86b300;}
 .green-text {color: #86b300;}
 .green-border {
 	border: 10px solid #86b300;
 	border-radius: 5px;
 }
-.blue {background-color: #0086b3;}
-.blue-text {color: #0086b3;}
-.blue-border {
-	border: 10px solid #0086b3;
+.purple {background-color: #b30086;}
+.purple-text {color: #b30086;}
+.purple-border {
+	border: 10px solid #b30086;
 	border-radius: 5px;
 }
 .table-border {

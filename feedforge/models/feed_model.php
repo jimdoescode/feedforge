@@ -24,7 +24,7 @@ class Feed_model extends CI_Model
     private function _get_field_type($id)
     {
         $query = $this->db->select('library')->where('id', $id)->get('feed_field_type');
-        if($query->num_rows() > 0)return $this->row()->library;
+        if($query->num_rows() > 0)return $query->row()->library;
         return false;
     }
     
@@ -86,7 +86,7 @@ class Feed_model extends CI_Model
         $typelib = $this->_get_field_type($typeid);
         $fieldshort = $this->_get_url_title($title);
         
-        $this->db->insert('feed_field', array('feed_id'=>$feedid, 'short'=>$short, 'title'=>$title, 'feed_field_type_id'=>$typeid));
+        $this->db->insert('feed_field', array('feed_id'=>$feedid, 'short'=>$fieldshort, 'title'=>$title, 'feed_field_type_id'=>$typeid));
         $this->load->library('field_types/'.$typelib, null, 'field');
         $this->dbforge->add_column($feedshort, array($fieldshort => $this->field->get_database_column_type()));
     }
@@ -100,7 +100,7 @@ class Feed_model extends CI_Model
         
         $this->db->update('feed_field', array('title'=>$title, 'short'=>$newshort, 'feed_field_type_id'=>$typeid), array('id'=>$fieldid));
         $this->load->library('field_types/'.$typelib, null, 'field');
-        $fielddata = array_merge($this->field->get_database_column_type(), array('name'=>$fieldshort));
+        $fielddata = array_merge($this->field->get_database_column_type(), array('name'=>$newshort));
         $this->dbforge->modify_column($feedshort, array($fieldshort=>$fielddata));
     }
     

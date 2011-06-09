@@ -24,7 +24,7 @@
 </div>
 <a class="fb_link" href="#modify_feeds">Add New Feed &raquo;</a>
 <div style="display: none">
-    <form id="modify_feeds" action="">
+    <form id="modify_feeds" class="fancy-form" action="">
         <p>
 			<label for="feedtitle">Feed Title: </label>
 			<input type="text" id="feedtitle" name="feedtitle" size="30"/>

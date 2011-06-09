@@ -22,7 +22,7 @@ class Admin extends CI_Controller
         $this->_render('Welcome', $this->load->view('admin_home', null, true));
     }
     
-    function get_feed_data($raw = false)
+    private function _get_feed_data($raw = false)
     {
         $feeds = $this->feed_model->get_feeds();
         if(!$raw)$feeds = json_encode(array('feeds'=>$feeds));
@@ -31,7 +31,7 @@ class Admin extends CI_Controller
     
     function feeds()
     {
-        $feeds = $this->get_feed_data(true);
+        $feeds = $this->_get_feed_data(true);
         if($feeds === false)$feeds = array();
         $this->_render('Feeds', $this->load->view('admin_feeds', array('feeds'=>$feeds), true));
     }
@@ -41,11 +41,13 @@ class Admin extends CI_Controller
         $feedid = $this->input->post('id');
         $title = $this->input->post('title');
         
-        if($feedid > 0)$this->feed_model->update_feed($feedid, $title);
-        else $this->feed_model->create_feed($title);
-        
+        if(strlen(trim($title)) > 0)
+        {
+            if($feedid > 0)$this->feed_model->update_feed($feedid, $title);
+            else $this->feed_model->create_feed($title);
+        }
         header('application/json');
-        echo $this->get_feed_data();
+        echo $this->_get_feed_data();
     }
     
     function delete_feed()
@@ -53,31 +55,47 @@ class Admin extends CI_Controller
         $feedid = $this->input->post('id');
         $this->feed_model->delete_feed($feedid);
         header('application/json');
-        echo $this->get_feed_data();
+        echo $this->_get_feed_data();
+    }
+    
+    private function _get_feed_field_data($feedid, $raw = false)
+    {
+        $feed = $this->feed_model->get_feed($feedid);
+        $fields = $this->feed_model->get_feed_fields($feedid);
+        if($fields === false)$fields = array();
+        $types = $this->feed_model->get_field_types();
+        $data = array('feed'=>$feed, 'types'=>$types, 'fields'=>$fields);
+        if(!$raw)return json_encode($data);
+        return $data;
     }
     
     function feed_fields($feedid)
     {
-        $feed = $this->feed_model->get_feed($feedid);
-        $fields = $this->feed_model->get_feed_fields($feedid);
-        $types = $this->feed_model->get_field_types();
-        if($fields === false)$fields = array();
-        $this->_render('Feed Fields', $this->load->view('admin_feed_fields', array('feed'=>$feed, 'types'=>$types, 'fields'=>$fields), true));
+        $data = $this->_get_feed_field_data($feedid, true);
+        $this->_render('Feed Fields', $this->load->view('admin_feed_fields', $data, true));
     }
     
-    function add_feed_field($feedid)
+    function modify_feed_fields($feedid)
     {
+        $fieldid = $this->input->post('id');
+        $title = $this->input->post('title');
+        $typeid = $this->input->post('type');
         
+        if(strlen(trim($title)) > 0 && strlen(trim($typeid)) > 0)
+        {
+            if($fieldid > 0)$this->feed_model->update_feed_field($feedid, $fieldid, $title, $typeid);
+            else $this->feed_model->add_feed_field($feedid, $title, $typeid);
+        }
+        header('application/json');
+        echo $this->_get_feed_field_data($feedid);
     }
     
-    function update_feed_field()
+    function delete_feed_field($feedid)
     {
-        
-    }
-    
-    function delete_feed_field()
-    {
-        
+        $fieldid = $this->input->post('id');
+        $this->feed_model->delete_feed_field($feedid, $fieldid);
+        header('application/json');
+        echo $this->_get_feed_field_data($feedid);
     }
     
     function entries($feedshort)
