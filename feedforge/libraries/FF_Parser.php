@@ -72,7 +72,7 @@ class FF_Parser extends CI_Parser
         $template = '';
         if($types !== false)
         {
-            $entries = $this->ci->feed_model->get_feed_entries($feed);
+            $entries = $this->ci->feed_model->get_feed_entries_for_tag($feed);
             if($entries !== false)
             {
                 $count = count($entries);
@@ -97,11 +97,15 @@ class FF_Parser extends CI_Parser
         }
         return $template;
     }
-    
-    private function _get_params($internal)
+    /**
+     * Parses a string of parameters in the form x="y" a="b"
+     * into an associative array with keys being the variable
+     * and values being the values (without quotes).
+     **/
+    private function _get_params($internal, $quote = '"')
     {
         $paramarray = array();
-        preg_match_all("/([\w]*?)\s*=\s*\"(.*?)\"/s", $internal, $params);
+        preg_match_all("/([\w]*?)\s*=\s*{$quote}(.*?){$quote}/s", $internal, $params);
         $paramarray = false;
         if(count($params) > 0)$paramarray = array_combine($params[1], $params[2]);
         return $paramarray;

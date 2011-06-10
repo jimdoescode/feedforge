@@ -138,6 +138,13 @@ class Feed_model extends CI_Model
         $this->db->delete($feedshort, array('id' => $entryid));
     }
     
+    function get_feed_entries($short)
+    {
+        $query = $this->db->get($short);
+        if($query->num_rows() > 0)return $query->result_array();
+        return false;
+    }
+    
     function get_feed_entry_types($feedshort)
     {
         $sql = 'SELECT ff.short, fft.library FROM feed f, feed_field ff, feed_field_type fft WHERE f.short=? AND ff.feed_id=f.id AND fft.id=ff.feed_field_type_id';
@@ -154,9 +161,9 @@ class Feed_model extends CI_Model
         return false;
     }
     
-    function get_feed_entries($feedshort, $options = array(), $limit = 30, $offset = 0)
+    function get_feed_entries_for_tag($feedshort, $options = array(), $limit = 30, $offset = 0)
     {
-        $query = $this->db->get($feedshort, $options, $limit, $offset);
+        $query = $this->db->get_where($feedshort, $options, $limit, $offset);
         if($query->num_rows() > 0)return $query->result_array();
         return false;
     }

@@ -98,9 +98,22 @@ class Admin extends CI_Controller
         echo $this->_get_feed_field_data($feedid);
     }
     
-    function entries($feedshort)
+    private function _get_feed_entries($feedid, $raw = false)
     {
-        
+        $feed = $this->feed_model->get_feed($feedid);
+        $fields = $this->feed_model->get_feed_fields($feedid);
+        $entries = $this->feed_model->get_feed_entries($feed['short']);
+        if($entries === false)$entries = array();
+        if($fields === false)$fields = array();
+        $data = array('feed'=>$feed, 'fields'=>$fields, 'entries'=>$entries);
+        if(!$raw)return json_encode($data);
+        return $data;
+    }
+    
+    function feed_entries($feedid)
+    {
+        $data = $this->_get_feed_entries($feedid, true);
+        $this->_render('Feed Entries', $this->load->view('admin_feed_entries', $data, true));
     }
     
     function add_entry()

@@ -39,13 +39,13 @@ function refresh_field_list(response)
 	var rows = '';
 	
 	for(var i=0; i < count; i++)
-		rows += '<tr><td class="center"><a href="#" title="Edit" onclick="return edit_feed_field('+feed['id']+', '+fields[i]['id']+', \''+fields[i]['title']+'\', '+fields[i]['feed_field_type_id']+');">(E)</a>&nbsp;&nbsp;<a href="#" title="Delete" onclick="return delete_field('+feed['id']+', '+fields[i]['id']+');">(X)</a></td><td>'+fields[i]['short']+'</td><td>'+fields[i]['title']+'</td><td>'+fields[i]['type_name']+'</td></tr>';
+		rows += '<tr><td class="center"><a href="#" title="Edit" onclick="return edit_field('+feed['id']+', '+fields[i]['id']+', \''+fields[i]['title']+'\', '+fields[i]['feed_field_type_id']+');">(E)</a>&nbsp;&nbsp;<a href="#" title="Delete" onclick="return delete_field('+feed['id']+', '+fields[i]['id']+');">(X)</a></td><td>'+fields[i]['short']+'</td><td>'+fields[i]['title']+'</td><td>'+fields[i]['type_name']+'</td></tr>';
 	if(count == 0)rows += '<tr><td colspan="4">No Fields Found</td></tr>';
 	
 	tbl.html(rows);
 }
 
-function edit_feed_field(feedid, fieldid, title, type)
+function edit_field(feedid, fieldid, title, type)
 {
 	$('#feedid').val(feedid);
 	$('#fieldtitle').val(title);
@@ -58,6 +58,21 @@ function delete_field(feedid, fieldid)
 {
 	if(confirm("Are you sure you want to delete this field?"))$.post(SITE+'admin/delete_feed_field/'+feedid, {id: fieldid}, refresh_field_list, 'json');
 	return false;
+}
+
+function refresh_entry_list(response)
+{
+	
+}
+
+function edit_entry(feedid, entryid)
+{
+	//use arguments array indexed at 2
+}
+
+function delete_entry(feedid, entryid)
+{
+	
 }
 
 function reset_inputs(elmid)
