@@ -1,0 +1,18 @@
+FeedForge Installation.
+
+Since we are currently in Alpha installation wont be the breeze it should be, but if you follow the steps outlined you shouldn't (I hope) have any problems. If you do have issues let me know.
+
+
+1) Upload the files into your desired location. Note that there is an htaccess file at the root. You must change this file if your installation is located in a sub directory. Example www.example.com/feedforge/ All you will need to do is edit the htaccess file and change the RewriteBase to be just the sub directory with a trailing slash. Using the earlier example the like would be RewriteBase /feedforge/
+
+2) Create a database that feedforge can use.
+
+3) Import the db_setup.sql file into the database you just created. It will make the tables that feedforge uses.
+
+4) Edit feedforge/config/database.php You should change the 'hostname', 'username', 'password' and 'database' values to have the information that will connect to the database you just setup.
+
+5) Edit feedforge/config/config.php Change the base_url config item to be the URL you will be using feedforge on.
+
+If everything was configured correctly you should be able to go to the url feedforge resides on and you will see a message saying that feedforge is running.
+
+
