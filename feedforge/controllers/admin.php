@@ -139,6 +139,8 @@ class Admin extends CI_Controller
         {
             $this->load->library('field_types/'.$field['library'], null, 'field');
             $values[$field['short']] = $this->field->database_preprocess($values[$field['short']]);
+            //Remove any curly braces out of fear they might be feedforge tags.
+            $values[$field['short']] = str_replace(array('{', '}'), '', $values[$field['short']]);
         }
         
         if($entryid > 0)$this->feed_model->update_feed_entry($feedid, $entryid, $values);
