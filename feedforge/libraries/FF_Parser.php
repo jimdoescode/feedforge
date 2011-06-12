@@ -90,7 +90,8 @@ class FF_Parser extends CI_Parser
                             if(is_array($tagdata[$key]))$val = $this->ci->format->display_tag_value($val, $tagdata[$key][1]);
                             else $val = $this->ci->format->display_tag_value($val);
                         }
-                        $template = str_replace($tagdata[$key], $val, $template);
+                        if(is_array($tagdata[$key]))$template = str_replace($tagdata[$key][0], $val, $template);
+                        else $template = str_replace($tagdata[$key], $val, $template);
                     }
                 }
             }
@@ -107,7 +108,8 @@ class FF_Parser extends CI_Parser
         $paramarray = array();
         preg_match_all("/([\w]*?)\s*=\s*{$quote}(.*?){$quote}/s", $internal, $params);
         $paramarray = false;
-        if(count($params) > 0)$paramarray = array_combine($params[1], $params[2]);
+        
+        if(count($params[0]) > 0)$paramarray = array_combine($params[1], $params[2]);
         return $paramarray;
     }
     

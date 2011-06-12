@@ -22,7 +22,7 @@ class date
     
     public function display_tag_value($value, $params = array())
     {
-        if(array_key_exists('format', $params))$value = date($params['format'], $value);
+        if(array_key_exists('format', $params))$value = date($params['format'], strtotime($value));
         return $value;
     }
 }

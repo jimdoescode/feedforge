@@ -13,6 +13,6 @@ Since we are currently in Alpha installation wont be the breeze it should be, bu
 
 5) Edit feedforge/config/config.php Change the base_url config item to be the URL you will be using feedforge on.
 
-If everything was configured correctly you should be able to go to the url feedforge resides on and you will see a message saying that feedforge is running.
+If everything was configured correctly you should be able to go to the url feedforge resides on and you will see a welcome message.
 
 

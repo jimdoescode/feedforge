@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 12, 2011 at 03:03 AM
+-- Generation Time: Jun 12, 2011 at 03:51 AM
 -- Server version: 5.1.44
 -- PHP Version: 5.2.13
 
@@ -22,16 +22,42 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `demo-feed`
+--
+
+CREATE TABLE `demo-feed` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `welcome-text` varchar(128) DEFAULT NULL,
+  `welcome-message` varchar(1024) DEFAULT NULL,
+  `cinco-de-mayo` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `demo-feed`
+--
+
+INSERT INTO `demo-feed` VALUES(1, 'Welcome to FeedForge', 'This message is being generated via a feed called "demo-feed" and a single entry. You can see how the template uses feed tags by going to the templates directory located in the root directory. You can also add or update feeds by going to the admin screen.', '1984-05-05');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `feed`
 --
 
-CREATE TABLE IF NOT EXISTS `feed` (
+CREATE TABLE `feed` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `short` varchar(32) NOT NULL,
   `title` varchar(32) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `short` (`short`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+
+--
+-- Dumping data for table `feed`
+--
+
+INSERT INTO `feed` VALUES(1, 'demo-feed', 'Demo Feed');
 
 -- --------------------------------------------------------
 
@@ -39,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `feed` (
 -- Table structure for table `feed_field`
 --
 
-CREATE TABLE IF NOT EXISTS `feed_field` (
+CREATE TABLE `feed_field` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `feed_id` int(11) NOT NULL,
   `short` varchar(32) NOT NULL,
@@ -47,7 +73,15 @@ CREATE TABLE IF NOT EXISTS `feed_field` (
   `feed_field_type_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `short` (`short`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `feed_field`
+--
+
+INSERT INTO `feed_field` VALUES(1, 1, 'welcome-text', 'Welcome Text', 1);
+INSERT INTO `feed_field` VALUES(2, 1, 'welcome-message', 'Welcome Message', 2);
+INSERT INTO `feed_field` VALUES(4, 1, 'cinco-de-mayo', 'Cinco De Mayo', 3);
 
 -- --------------------------------------------------------
 
@@ -55,14 +89,22 @@ CREATE TABLE IF NOT EXISTS `feed_field` (
 -- Table structure for table `feed_field_type`
 --
 
-CREATE TABLE IF NOT EXISTS `feed_field_type` (
+CREATE TABLE `feed_field_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `library` varchar(32) NOT NULL,
   `title` varchar(32) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `library` (`library`),
   UNIQUE KEY `title` (`title`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `feed_field_type`
+--
+
+INSERT INTO `feed_field_type` VALUES(1, 'small_text', 'Text Input Field');
+INSERT INTO `feed_field_type` VALUES(2, 'large_text', 'Text Area Field');
+INSERT INTO `feed_field_type` VALUES(3, 'date', 'Date Input Field');
 
 -- --------------------------------------------------------
 
@@ -70,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `feed_field_type` (
 -- Table structure for table `variable`
 --
 
-CREATE TABLE IF NOT EXISTS `variable` (
+CREATE TABLE `variable` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(64) NOT NULL,
   `short` varchar(64) NOT NULL,
@@ -78,3 +120,8 @@ CREATE TABLE IF NOT EXISTS `variable` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `short` (`short`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `variable`
+--
+
