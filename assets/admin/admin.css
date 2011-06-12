@@ -109,6 +109,13 @@ ul {list-style-type: none;}
 }
 .error {background-color: #f03c00;}
 .fancy-form {width: 320px;}
+	.fancy-form input[type="text"],
+	.fancy-form input[type="date"],
+	.fancy-form input[type="password"] {width: 220px;}
+	.fancy-form textarea {
+		width: 310px;
+		height: 100px;
+	}
 .green {background-color: #86b300;}
 .green-text {color: #86b300;}
 .green-border {

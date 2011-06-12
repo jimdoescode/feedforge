@@ -38,12 +38,12 @@
 |
 */
 
-$route['default_controller'] = 'feedforge';
+$route['default_controller'] = 'template';
 $route['404_override'] = '';
 
 $route['admin'] = 'admin';
 $route['admin/(:any)'] = 'admin/$1';
-$route[':any'] = 'feedforge/execute';
+$route[':any'] = 'template/execute';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

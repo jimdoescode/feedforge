@@ -12,7 +12,7 @@
         </thead>
         <tbody>
 <?php foreach($feeds as $feed): ?>
-            <tr><td class="center"><a href='<?=site_url('admin/feed_fields/'.$feed['id']);?>' title='Fields'>(F)</a>&nbsp;&nbsp;<a href='#' title='Edit' onclick='return edit_feed(<?=$feed['id'];?>, "<?=$feed['title'];?>");'>(E)</a>&nbsp;&nbsp;<a href='<?=site_url('admin/delete_feed/'.$feed['id']);?>' title='Delete' onclick='return delete_feed(<?=$feed['id'];?>);'>(X)</a></td><td class="center"><?=$feed['id'];?></td><td><?=$feed['title'];?></td><td><?=$feed['short'];?></td><td><a href="<?=site_url('admin/feed_entries/'.$feed['id']);?>">View Entries &raquo;</a></td></tr>
+            <tr><td class="center"><a href='#' title='Edit' onclick='return edit_feed(<?=$feed['id'];?>, "<?=$feed['title'];?>");'>(E)</a>&nbsp;&nbsp;<a href='<?=site_url('admin/delete_feed/'.$feed['id']);?>' title='Delete' onclick='return delete_feed(<?=$feed['id'];?>);'>(X)</a></td><td class="center"><?=$feed['id'];?></td><td><?=$feed['title'];?></td><td><?=$feed['short'];?></td><td><a href='<?=site_url('admin/feed_fields/'.$feed['id']);?>' title='Fields'>View Fields &raquo;</a><br/><a class="green-text" href="<?=site_url('admin/feed_entries/'.$feed['id']);?>">View Entries &raquo;</a></td></tr>
 <?php
     endforeach;
     if(empty($feeds)):

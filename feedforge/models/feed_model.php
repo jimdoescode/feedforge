@@ -74,7 +74,7 @@ class Feed_model extends CI_Model
     
     function get_feed_fields($feedid)
     {
-        $sql = 'SELECT ff.*, fft.title AS type_name FROM feed_field ff, feed_field_type fft WHERE ff.feed_id=? AND fft.id=ff.feed_field_type_id';
+        $sql = 'SELECT ff.*, fft.title AS type_name, fft.library FROM feed_field ff, feed_field_type fft WHERE ff.feed_id=? AND fft.id=ff.feed_field_type_id';
         $query = $this->db->query($sql, array($feedid));
         if($query->num_rows() > 0)return $query->result_array();
         return false;

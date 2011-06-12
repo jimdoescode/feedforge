@@ -3,26 +3,26 @@
 //This library will do processing on date fields
 class date
 {
-    public function __construct()
-    {
-        $this->ci = get_instance();    
-    }
-    
     public function get_database_column_type()
     {
         return array('type'=>'DATE');
     }
     
-    public function display_admin($name, $value)
+    public function database_preprocess($value)
     {
-        $this->ci->load->helper('form');
-        form_input(array('name'=>$name, 'value'=>$value));
+        $date = strtotime($value);   
+        return date('Y-m-d', $date); 
     }
     
-    public function display($value, $params = array())
+    public function display_admin_input($name)
     {
-        $this->ci->load->helper('date');
-        if(array_key_exists('format', $params))$value = mdate($params['format'], $value);
+        $today = date('n/j/Y');
+        return '<input type="date" name="'.$name.'" id="'.$name.'" value="'.$today.'"/>';
+    }
+    
+    public function display_tag_value($value, $params = array())
+    {
+        if(array_key_exists('format', $params))$value = date($params['format'], $value);
         return $value;
     }
 }

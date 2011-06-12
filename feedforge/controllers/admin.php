@@ -6,8 +6,8 @@ class Admin extends CI_Controller
     {
         parent::__construct();
         
-        //TODO: Put a check in here to make sure if they aren't authenticated that
-        //the are redirected to an authentication page.
+        //TODO: Put a check in here to make sure if they aren't authenticated 
+        //that they are redirected to an authentication page.
         
         $this->load->model('feed_model');    
     }
@@ -105,6 +105,9 @@ class Admin extends CI_Controller
         $entries = $this->feed_model->get_feed_entries($feed['short']);
         if($entries === false)$entries = array();
         if($fields === false)$fields = array();
+        
+        //TODO: Add Entry Preprocessing here to display entry values consistently in the admin panel
+        
         $data = array('feed'=>$feed, 'fields'=>$fields, 'entries'=>$entries);
         if(!$raw)return json_encode($data);
         return $data;
@@ -113,22 +116,44 @@ class Admin extends CI_Controller
     function feed_entries($feedid)
     {
         $data = $this->_get_feed_entries($feedid, true);
+        
+        $fieldcount = count($data['fields']);
+        for($i=0; $i < $fieldcount; $i++)
+        {
+            $this->load->library('field_types/'.$data['fields'][$i]['library'], null, 'field');
+            $data['fields'][$i]['input'] = $this->field->display_admin_input($data['fields'][$i]['short']);
+        }
+        
         $this->_render('Feed Entries', $this->load->view('admin_feed_entries', $data, true));
     }
     
-    function add_entry()
+    function modify_feed_entries($feedid)
     {
+        $entryid = $this->input->post('id');
+        //Diff the post array to prevent messing up relations via changing id values.
+        $values = array_diff($_POST, array('id'=>$entryid));
         
+        //Perform field preprocessing on the input
+        $fields = $this->feed_model->get_feed_fields($feedid);
+        foreach($fields as $field)
+        {
+            $this->load->library('field_types/'.$field['library'], null, 'field');
+            $values[$field['short']] = $this->field->database_preprocess($values[$field['short']]);
+        }
+        
+        if($entryid > 0)$this->feed_model->update_feed_entry($feedid, $entryid, $values);
+        else $this->feed_model->add_feed_entry($feedid, $values);
+        
+        header('application/json');
+        echo $this->_get_feed_entries($feedid);
     }
     
-    function update_entry()
+    function delete_feed_entry($feedid)
     {
-        
-    }
-    
-    function delete_entry()
-    {
-        
+        $entryid = $this->input->post('id');
+        $this->feed_model->delete_feed_entry($feedid, $entryid);
+        header('application/json');
+        echo $this->_get_feed_entries($feedid);
     }
 }
 

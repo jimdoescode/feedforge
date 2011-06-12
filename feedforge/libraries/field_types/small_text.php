@@ -8,13 +8,17 @@ class small_text
         return array('type'=>'VARCHAR','constraint'=>128);
     }
     
-    public function display_admin($name, $value)
+    public function database_preprocess($value)
     {
-        $this->CI->load->helper('form');
-        form_input(array('name'=>$name, 'value'=>$value));
+       return $value; 
     }
     
-    public function display($value, $params = array())
+    public function display_admin_input($name)
+    {
+        return '<input type="text" name="'.$name.'" id="'.$name.'" maxsize="128"/>';
+    }
+    
+    public function display_tag_value($value, $params = array())
     {
         return $value;
     }

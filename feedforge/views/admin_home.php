@@ -15,11 +15,10 @@
 			{/ff:feed}
 		</p>
 	</div>
-	<a href='<?=site_url('admin/feeds');?>' class='blue-text' title=''>Add/Edit Feeds &raquo;</a>
 </article>
 
 <article class='column'>
-	<div class='internal purple-border'>
+	<div class='internal green-border'>
 		<h2>What is an entry?</h2>
 		<p>
 			Entries are the content of feeds. In simpler terms entries are your content. Whenever you use a feed you will be displaying entries, an example would be a single blog post.
@@ -32,10 +31,9 @@
 			{/ff:feed}
 		</p>
 	</div>
-	<a href='#' class='purple-text' title=''>Add/Edit Entries &raquo;</a>
 </article>
 <article class='column column-last'>
-	<div class='internal green-border'>
+	<div class='internal purple-border'>
 		<h2> What are variables?</h2>
 		<p>
 			Variables are constant values that you wish to access in your templates. Say for instance an address which will be displayed many places and could change eventually.
@@ -45,5 +43,4 @@
 			{ff:global="current-address"}
 		</p>
 	</div>
-	<a href='#' class='green-text' title=''>Add/Edit Variables &raquo;</a>
 </article>

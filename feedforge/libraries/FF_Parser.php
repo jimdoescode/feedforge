@@ -87,8 +87,8 @@ class FF_Parser extends CI_Parser
                         if(array_key_exists($key, $types))
                         {
                             $this->ci->load->library('field_types/'.$types[$key], null, 'format');
-                            if(is_array($tagdata[$key]))$val = $this->ci->format->display($val, $tagdata[$key][1]);
-                            else $val = $this->ci->format->display($val);
+                            if(is_array($tagdata[$key]))$val = $this->ci->format->display_tag_value($val, $tagdata[$key][1]);
+                            else $val = $this->ci->format->display_tag_value($val);
                         }
                         $template = str_replace($tagdata[$key], $val, $template);
                     }

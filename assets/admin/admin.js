@@ -8,7 +8,7 @@ function refresh_feed_list(response)
 	var rows = '';
 	
 	for(var i=0; i < count; i++)
-		rows += '<tr><td class="center"><a href="'+SITE+'admin/feed_fields/'+feeds[i]['id']+'" title="Fields">(F)</a>&nbsp;&nbsp;<a href="#" title="Edit" onclick="return edit_feed('+feeds[i]['id']+', \''+feeds[i]['title']+'\')">(E)</a>&nbsp;&nbsp;<a href="'+SITE+'admin/delete_feed/'+feeds[i]['id']+'" title="Delete" onclick="return delete_feed('+feeds[i]['id']+');">(X)</a></td><td class="center">'+feeds[i]['id']+'</td><td>'+feeds[i]['title']+'</td><td>'+feeds[i]['short']+'</td><td><a href="#">View Entries &raquo;</a></td></tr>';
+		rows += '<tr><td class="center"><a href="#" title="Edit" onclick="return edit_feed('+feeds[i]['id']+', \''+feeds[i]['title']+'\')">(E)</a>&nbsp;&nbsp;<a href="'+SITE+'admin/delete_feed/'+feeds[i]['id']+'" title="Delete" onclick="return delete_feed('+feeds[i]['id']+');">(X)</a></td><td class="center">'+feeds[i]['id']+'</td><td>'+feeds[i]['title']+'</td><td>'+feeds[i]['short']+'</td><td><a href="'+SITE+'admin/feed_fields/'+feeds[i]['id']+'" title="Fields">(F)</a><br/><a class="green-text" href="'+SITE+'admin/feed_entries/'+feeds[i]['id']+'">View Entries &raquo;</a></td></tr>';
 	if(count == 0)rows += '<tr><td colspan="5">No Feeds Found</td></tr>';
 	
 	tbl.html(rows);
@@ -29,7 +29,6 @@ function delete_feed(id)
 
 function refresh_field_list(response)
 {
-	console.log(response);
 	var tbl = $('table tbody');
 	tbl.text('');
 	var feed = response.feed;
@@ -62,24 +61,67 @@ function delete_field(feedid, fieldid)
 
 function refresh_entry_list(response)
 {
+	var tbl = $('table tbody');
+	tbl.text('');
+	var feed = response.feed;
+	var fields = response.fields;
+	var entries = response.entries;
 	
+	var fieldcount = fields.length;
+	var entrycount = entries.length;
+	var rows = '';
+	
+	for(var i=0; i < entrycount; i++)
+	{
+		rows += '<tr>';
+		rows += '<td class="center"><a href="#" class="green-text" title="Edit" onclick="return edit_entry('+feed.id+', '+entries[i]['id']+', this);">(E)</a>&nbsp;&nbsp;<a href="#" class="green-text" title="Delete" onclick="return delete_entry('+feed.id+', '+entries[i]['id']+')">(X)</a></td>';
+        rows += '<td class="center">'+entries[i]['id']+'</td>';
+        for(var j=0; j < fieldcount; j++)
+        {
+        	var val = entries[i][fields[j]['short']];
+        	val = (val == null) ? '' : val;
+        	rows += '<td class="entry_column" title="'+fields[j]['short']+'">'+val+'</td>';
+        }
+		rows += '</tr>';
+	}
+	if(entrycount == 0)rows += '<tr><td colspan="'+fieldcount+'">No Entries Found.</td></tr>';
+	
+	tbl.html(rows);
 }
 
-function edit_entry(feedid, entryid)
+function edit_entry(feedid, entryid, elm)
 {
-	//use arguments array indexed at 2
+	$('#feedid').val(feedid);
+	$('#entryid').val(entryid);
+	
+	$(elm).parent().siblings('td.entry_column').each(function()
+	{
+		var id = $(this).attr('title');
+		var val = $(this).text();
+		$('#'+id).val(val);
+	});
+	
+	$('a.fb_link').click();
+	return false;
 }
 
 function delete_entry(feedid, entryid)
 {
-	
+	if(confirm("Are you sure you want to delete this entry?"))$.post(SITE+'admin/delete_feed_entry/'+feedid, {id: entryid}, refresh_entry_list, 'json');
+	return false;
 }
-
+//Will need to add input types to this as they arrive.
+//Should be good for now though.
 function reset_inputs(elmid)
 {
+	var today = new Date();
+	var date = (today.getMonth()+1)+'/'+today.getDate()+'/'+today.getFullYear();
+	$(elmid+' input[type="date"]').not(':disabled').val(date);
 	$(elmid+' input[type="text"]').not(':disabled').val('');
+	$(elmid+' input[type="password"]').not(':disabled').val('');
 	$(elmid+' input[type="hidden"]').not(':disabled').val(0);
 	$(elmid+' select').val('');
+	$(elmid+' textarea').val('');
 }
 
 $(document).ready(function() 
@@ -123,6 +165,25 @@ $(document).ready(function()
 		else if(title.length <= 0)alert("A title is required for a feed field.");
 		else alert("A field type is required for a feed field.");
 		
+		return false;
+	});
+	
+	$('#modify_feed_entries').submit(function()
+	{
+		var feedid = $('#feedid').val();
+		var entryid = $('#entryid').val();
+		
+		var data = {id: entryid};
+		
+		//Use the field labels to get the input id
+		$('label.entry_label').each(function()
+		{
+			var id = $(this).attr('for');
+			data[id] = $('#'+id).val();
+		});
+
+		$.post(SITE+"admin/modify_feed_entries/"+feedid, data, refresh_entry_list, 'json');
+		$.fancybox.close();
 		return false;
 	});
 });

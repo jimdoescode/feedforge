@@ -8,13 +8,17 @@ class large_text
         return array('type'=>'VARCHAR','constraint'=>1024);
     }
     
-    public function display_admin($name, $value)
+    public function database_preprocess($value)
     {
-        $this->CI->load->helper('form');
-        form_textarea(array('name'=>$name, 'value'=>$value));
+       return $value; 
     }
     
-    public function display($value, $params = array())
+    public function display_admin_input($name)
+    {
+        return '<textarea id="'.$name.'" name="'.$name.'"></textarea>';
+    }
+    
+    public function display_tag_value($value, $params = array())
     {
         return $value;
     }

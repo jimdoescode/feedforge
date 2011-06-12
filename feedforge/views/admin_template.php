@@ -17,13 +17,11 @@
         <header>
             <img id="logo" src="<?=site_url('assets/admin/logo.png');?>" alt=''/>
             <ul id="nav">
-                <li><a href="<?=site_url('admin/feeds');?>" title="">Feeds</a></li>
+                <li><a href="<?=site_url('admin/feeds');?>" title="Feed Admin">Feeds</a></li>
                 <li class='spacer'>/</li>
-                <li><a href="<?=site_url('admin/entries');?>" title="">Entries</a></li>
+                <li><a href="<?=site_url('admin/variables');?>" title="Variable Admin">Variables</a></li>
                 <li class='spacer'>/</li>
-                <li><a href="<?=site_url('admin/variables');?>" title="">Variables</a></li>
-                <li class='spacer'>/</li>
-                <li><a href="<?=site_url('admin/config');?>" title="">Config</a></li>
+                <li><a href="<?=site_url('admin/config');?>" title="Config Admin">Config</a></li>
             </ul>
         </header>
     </section>
