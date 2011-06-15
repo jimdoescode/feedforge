@@ -8,11 +8,12 @@ class FF_Parser extends CI_Parser
         $this->ci->load->model('feed_model');
     }
     
-    function parse_template($path, $globals = array(), $merged = false)
+    function parse_template($path, $globals = false, $merged = false)
     {
         //Build the full path to the template and make sure it exists.
         $fullpath = TEMPPATH.$path.EXT;
         if(!file_exists($fullpath))return false;
+        if($globals === false)$globals = array();
         //Get the initial file.
         $template = $this->ci->load->file($fullpath, true);
         //Fill in any global variables from a merge call
@@ -72,7 +73,7 @@ class FF_Parser extends CI_Parser
         $template = '';
         if($types !== false)
         {
-            $entries = $this->ci->feed_model->get_feed_entries_for_tag($feed);
+            $entries = $this->ci->feed_model->get_template_feed_entries($feed);//TODO Allow passing in parameters to the tag
             if($entries !== false)
             {
                 $count = count($entries);

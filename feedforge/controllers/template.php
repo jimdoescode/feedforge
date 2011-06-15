@@ -6,6 +6,7 @@ class Template extends CI_Controller
     {
         parent::__construct();
         $this->load->library('parser');
+        $this->load->model('variable_model');
     }
     
     function index()
@@ -16,7 +17,8 @@ class Template extends CI_Controller
     function execute($path = false)
     {   
         if($path === false)$path = $this->uri->uri_string();
-        $template = $this->parser->parse_template($path);
+        $variables = $this->variable_model->get_template_variables();
+        $template = $this->parser->parse_template($path, $variables);
         if($template !== false)echo $template;
         else show_404();
     }

@@ -9,7 +9,8 @@ class Admin extends CI_Controller
         //TODO: Put a check in here to make sure if they aren't authenticated 
         //that they are redirected to an authentication page.
         
-        $this->load->model('feed_model');    
+        $this->load->model('feed_model');
+        $this->load->model('variable_model');
     }
     
     private function _render($title, $page)
@@ -156,6 +157,43 @@ class Admin extends CI_Controller
         $this->feed_model->delete_feed_entry($feedid, $entryid);
         header('application/json');
         echo $this->_get_feed_entries($feedid);
+    }
+    
+    private function _get_variable_data($raw = false)
+    {
+        $vars = $this->variable_model->get_variables();
+        if(!$raw)$vars = json_encode(array('variables'=>$vars));
+        return $vars;
+    }
+    
+    function variables()
+    {
+        $vars = $this->_get_variable_data(true);
+        if($vars === false)$vars = array();
+        $this->_render('Variables', $this->load->view('admin_variables', array('variables'=>$vars), true));
+    }
+    
+    function modify_variables()
+    {
+        $id = $this->input->post('id');
+        $title = $this->input->post('title');
+        $value = $this->input->post('value');
+        
+        if(strlen(trim($title)) > 0)
+        {
+            if($id > 0)$this->variable_model->update_variable($id, $title, $value);
+            else $this->variable_model->add_variable($title, $value);
+        }
+        header('application/json');
+        echo $this->_get_variable_data();
+    }
+    
+    function delete_variable()
+    {
+        $id = $this->input->post('id');
+        $this->variable_model->delete_variable($id);
+        header('application/json');
+        echo $this->_get_variable_data();
     }
 }
 

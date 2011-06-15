@@ -4,7 +4,7 @@
         <thead>
             <tr>
                 <th class="medium"></th>
-                <th class="large">Tag Name</th>
+                <th class="large">Field Tag Name</th>
                 <th class="large">Field Title</th>
                 <th class="large">Field Type</th>
             </tr>

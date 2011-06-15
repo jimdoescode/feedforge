@@ -1,13 +1,13 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Feed_model extends CI_Model
+class Feed_model extends FF_Model
 {
     function __construct()
     {
         parent::__construct();
         $this->load->dbforge();
     }
-    
+    /*
     private function _get_url_title($title)
     {
         $separator = $this->config->item('separator');
@@ -20,7 +20,7 @@ class Feed_model extends CI_Model
         if($query->num_rows() > 0)return $query->row()->short;
         return false;
     }
-    
+    */
     private function _get_field_type($id)
     {
         $query = $this->db->select('library')->where('id', $id)->get('feed_field_type');
@@ -161,7 +161,7 @@ class Feed_model extends CI_Model
         return false;
     }
     
-    function get_feed_entries_for_tag($feedshort, $options = array(), $limit = 30, $offset = 0)
+    function get_template_feed_entries($feedshort, $options = array(), $limit = 30, $offset = 0)
     {
         $query = $this->db->get_where($feedshort, $options, $limit, $offset);
         if($query->num_rows() > 0)return $query->result_array();

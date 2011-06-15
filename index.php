@@ -71,6 +71,9 @@ if (defined('ENVIRONMENT'))
  *
  * NO TRAILING SLASH!
  *
+ * Renamed from application to feedforge
+ * Jim Saunders
+ *
  */
 	$application_folder = 'feedforge';
 
@@ -175,6 +178,7 @@ if (defined('ENVIRONMENT'))
 	define('SYSDIR', trim(strrchr(trim(BASEPATH, '/'), '/'), '/'));
 
 	// Path to the feedforge template folder
+	// Added by Jim Saunders
 	define('TEMPPATH', 'templates/');
 
 
