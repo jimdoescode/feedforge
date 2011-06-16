@@ -1,4 +1,4 @@
-<h1>Welcome to the Feedforge Admin Page</h1>
+<h1>Welcome to the Feed Forge Admin Page</h1>
 <p>
 	Here you can create and update feeds, add and update feed entries, as well as handle various other administrative duties.
 </p>

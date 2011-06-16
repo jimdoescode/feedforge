@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `demo-feed` (
 -- Dumping data for table `demo-feed`
 --
 
-INSERT INTO `demo-feed` VALUES(1, 'Welcome to FeedForge', 'This message is being generated via a feed called "demo-feed" and a single entry. You can see how the template uses feed tags by going to the templates directory located in the root directory. You can also add or update feeds by going to the admin screen.', '1984-05-05');
+INSERT INTO `demo-feed` VALUES(1, 'Welcome to Feed Forge', 'This message is being generated via a feed called "demo-feed" and a single entry. You can see how the template uses feed tags by going to the templates directory located in the root directory. You can also add or update feeds by going to the admin screen.', '1984-05-05');
 
 -- --------------------------------------------------------
 
