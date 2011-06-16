@@ -119,3 +119,4 @@ CREATE TABLE IF NOT EXISTS `variable` (
 -- Dumping data for table `variable`
 --
 
+INSERT INTO `variable` VALUES(1, 'CSS', 'css', 'assets/css/style.css');
