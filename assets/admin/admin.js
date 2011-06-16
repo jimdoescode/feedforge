@@ -38,7 +38,7 @@ function refresh_field_list(response)
 	var rows = '';
 	
 	for(var i=0; i < count; i++)
-		rows += '<tr><td class="center"><a href="#" title="Edit" onclick="return edit_field('+feed['id']+', '+fields[i]['id']+', \''+fields[i]['title']+'\', '+fields[i]['feed_field_type_id']+');">(E)</a>&nbsp;&nbsp;<a href="#" title="Delete" onclick="return delete_field('+feed['id']+', '+fields[i]['id']+');">(X)</a></td><td>'+fields[i]['short']+'</td><td>'+fields[i]['title']+'</td><td>'+fields[i]['type_name']+'</td></tr>';
+		rows += '<tr><td class="center"><a href="#" title="Edit" onclick="return edit_field('+feed['id']+', '+fields[i]['id']+', \''+fields[i]['title']+'\', '+fields[i]['feed_field_type_id']+');">(E)</a>&nbsp;&nbsp;<a href="#" title="Delete" onclick="return delete_field('+feed['id']+', '+fields[i]['id']+');">(X)</a></td><td>'+fields[i]['title']+'</td><td>'+fields[i]['short']+'</td><td>'+fields[i]['type_name']+'</td></tr>';
 	if(count == 0)rows += '<tr><td colspan="4">No Fields Found</td></tr>';
 	
 	tbl.html(rows);
@@ -110,6 +110,37 @@ function delete_entry(feedid, entryid)
 	if(confirm("Are you sure you want to delete this entry?"))$.post(SITE+'admin/delete_feed_entry/'+feedid, {id: entryid}, refresh_entry_list, 'json');
 	return false;
 }
+
+function refresh_variable_list(response)
+{
+	var tbl = $('table tbody');
+	tbl.text('');
+	var vars = response.variables;
+	
+	var count = vars.length;
+	var rows = '';
+	
+	for(var i=0; i < count; i++)
+		rows += '<tr><td class="center"><a href="#" class="purple-text" title="Edit" onclick="return edit_variable('+vars[i]['id']+', \''+vars[i]['title']+'\', \''+vars[i]['value']+'\')">(E)</a>&nbsp;&nbsp;<a href="'+SITE+'admin/delete_variable/'+vars[i]['id']+'" class="purple-text" title="Delete" onclick="return delete_variable('+vars[i]['id']+');">(X)</a></td><td class="center">'+vars[i]['id']+'</td><td>'+vars[i]['title']+'</td><td>'+vars[i]['short']+'</td><td>'+vars[i]['value']+'</td></tr>';
+	if(count == 0)rows += '<tr><td colspan="5">No Variables Found</td></tr>';
+	
+	tbl.html(rows);
+}
+
+function edit_variable(varid, title, value)
+{
+	$('#variableid').val(varid);
+	$('#variabletitle').val(title);
+	$('#variablevalue').val(value);
+	$('a.fb_link').click();	
+}
+
+function delete_variable(varid)
+{
+	if(confirm("Are you sure you want to delete this variable?"))$.post(SITE+'admin/delete_variable', {id: varid}, refresh_variable_list, 'json');
+	return false;
+}
+
 //Will need to add input types to this as they arrive.
 //Should be good for now though.
 function reset_inputs(elmid)
@@ -170,8 +201,8 @@ $(document).ready(function()
 	
 	$('#modify_feed_entries').submit(function()
 	{
-		var feedid = $('#feedid').val();
-		var entryid = $('#entryid').val();
+		var feedid = $.trim($('#feedid').val());
+		var entryid = $.trim($('#entryid').val());
 		
 		var data = {id: entryid};
 		
@@ -179,11 +210,28 @@ $(document).ready(function()
 		$('label.entry_label').each(function()
 		{
 			var id = $(this).attr('for');
-			data[id] = $('#'+id).val();
+			data[id] = $.trim($('#'+id).val());
 		});
 
 		$.post(SITE+"admin/modify_feed_entries/"+feedid, data, refresh_entry_list, 'json');
 		$.fancybox.close();
+		return false;
+	});
+	
+	$('#modify_variables').submit(function()
+	{
+		var title = $.trim($('#variabletitle').val());
+		var value = $.trim($('#variablevalue').val());
+		
+		if(title.length > 0 && value.length > 0)
+		{
+			var varid = $.trim($('#variableid').val());
+			$.post(SITE+"admin/modify_variables/", {id: varid, title: title, value: value}, refresh_variable_list, 'json');
+			$.fancybox.close();
+		}	
+		else if(title.length <= 0)alert("A title is required for a variable.");
+		else alert("A value is required for a variable.");
+		
 		return false;
 	});
 });

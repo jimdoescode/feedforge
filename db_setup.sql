@@ -1,11 +1,5 @@
--- phpMyAdmin SQL Dump
--- version 3.2.5
--- http://www.phpmyadmin.net
+-- Feed Forge Installation SQL Dump
 --
--- Host: localhost
--- Generation Time: Jun 12, 2011 at 03:51 AM
--- Server version: 5.1.44
--- PHP Version: 5.2.13
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -25,7 +19,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Table structure for table `demo-feed`
 --
 
-CREATE TABLE `demo-feed` (
+CREATE TABLE IF NOT EXISTS `demo-feed` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `welcome-text` varchar(128) DEFAULT NULL,
   `welcome-message` varchar(1024) DEFAULT NULL,
@@ -45,7 +39,7 @@ INSERT INTO `demo-feed` VALUES(1, 'Welcome to FeedForge', 'This message is being
 -- Table structure for table `feed`
 --
 
-CREATE TABLE `feed` (
+CREATE TABLE IF NOT EXISTS `feed` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `short` varchar(32) NOT NULL,
   `title` varchar(32) NOT NULL,
@@ -65,7 +59,7 @@ INSERT INTO `feed` VALUES(1, 'demo-feed', 'Demo Feed');
 -- Table structure for table `feed_field`
 --
 
-CREATE TABLE `feed_field` (
+CREATE TABLE IF NOT EXISTS `feed_field` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `feed_id` int(11) NOT NULL,
   `short` varchar(32) NOT NULL,
@@ -89,7 +83,7 @@ INSERT INTO `feed_field` VALUES(4, 1, 'cinco-de-mayo', 'Cinco De Mayo', 3);
 -- Table structure for table `feed_field_type`
 --
 
-CREATE TABLE `feed_field_type` (
+CREATE TABLE IF NOT EXISTS `feed_field_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `library` varchar(32) NOT NULL,
   `title` varchar(32) NOT NULL,
@@ -112,7 +106,7 @@ INSERT INTO `feed_field_type` VALUES(3, 'date', 'Date Input Field');
 -- Table structure for table `variable`
 --
 
-CREATE TABLE `variable` (
+CREATE TABLE IF NOT EXISTS `variable` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(64) NOT NULL,
   `short` varchar(64) NOT NULL,

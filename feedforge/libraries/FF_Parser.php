@@ -2,6 +2,8 @@
 
 class FF_Parser extends CI_Parser
 {
+    private $quote = '"';
+    
     function __construct()
     {
         $this->ci = get_instance();
@@ -17,7 +19,7 @@ class FF_Parser extends CI_Parser
         //Get the initial file.
         $template = $this->ci->load->file($fullpath, true);
         //Fill in any global variables from a merge call
-        if($merged)$template = $this->_parse_globals($template, $globals, 'merge:');
+        if($merged)$template = $this->_parse_globals($template, $globals, 'merge:var');
         //Fill in any templates that are merged into this one
         $template = $this->_parse_merges($template);
         //Fill in any standard global variables.
@@ -32,7 +34,7 @@ class FF_Parser extends CI_Parser
     {
         $globalArray = array();
         foreach($globals as $key => $val)
-            $globalArray[$pre.'="'.$key.'"'] = $val;
+            $globalArray[$pre.'='.$this->quote.$key.$this->quote] = $val;
         
         $template = $this->parse_string($template, $globalArray, true);
         return $template;
@@ -40,7 +42,7 @@ class FF_Parser extends CI_Parser
     
     private function _parse_merges($template)
     {
-        $reg = "/\\{$this->l_delim}ff:merge\s*=\s*\"(.+?)\"\s*(.*?)\\{$this->r_delim}/s";
+        $reg = "/\\{$this->l_delim}ff:merge\s*=\s*{$this->quote}(.+?){$this->quote}\s*(.*?)\\{$this->r_delim}/s";
         preg_match_all($reg, $template, $mergedata);
         $mergecount = count($mergedata[0]);
         for($i=0; $i < $mergecount; $i++)
@@ -54,7 +56,7 @@ class FF_Parser extends CI_Parser
     
     private function _parse_feeds($template)
     {
-        $reg = "/\\{$this->l_delim}ff:feed\s*=\s*\"(.+?)\"\s*(.*?)\\{$this->r_delim}(.+?)\\{$this->l_delim}\/ff:feed\\{$this->r_delim}/s";
+        $reg = "/\\{$this->l_delim}ff:feed\s*=\s*{$this->quote}(.+?){$this->quote}\s*(.*?)\\{$this->r_delim}(.+?)\\{$this->l_delim}\/ff:feed\\{$this->r_delim}/s";
         preg_match_all($reg, $template, $feeddata);
         $feedcount = count($feeddata[0]);
         for($i=0; $i < $feedcount; $i++)
@@ -104,10 +106,10 @@ class FF_Parser extends CI_Parser
      * into an associative array with keys being the variable
      * and values being the values (without quotes).
      **/
-    private function _get_params($internal, $quote = '"')
+    private function _get_params($internal)
     {
         $paramarray = array();
-        preg_match_all("/([\w]*?)\s*=\s*{$quote}(.*?){$quote}/s", $internal, $params);
+        preg_match_all("/([\w]*?)\s*=\s*{$this->quote}(.*?){$this->quote}/s", $internal, $params);
         $paramarray = false;
         
         if(count($params[0]) > 0)$paramarray = array_combine($params[1], $params[2]);

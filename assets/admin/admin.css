@@ -108,13 +108,21 @@ ul {list-style-type: none;}
 	border-radius: 5px;
 }
 .error {background-color: #f03c00;}
-.fancy-form {width: 320px;}
+.fancy-form {width: 350px;}
+	.fancy-form label {
+		display: block;
+		width: 200px;
+	}
 	.fancy-form input[type="text"],
 	.fancy-form input[type="date"],
-	.fancy-form input[type="password"] {width: 220px;}
+	.fancy-form input[type="password"],
 	.fancy-form textarea {
-		width: 310px;
+		width: 342px;
+		display: block;
+	}
+	.fancy-form textarea {
 		height: 100px;
+		width: 346px;
 	}
 .green {background-color: #86b300;}
 .green-text {color: #86b300;}

@@ -8,7 +8,7 @@ $fieldCount = count($fields);
         <thead>
             <tr>
                 <th class='medium'></th>
-                <th class='medium center'>Entry ID</th>
+                <th class='small center'>ID</th>
 <?php for($i=0; $i < $fieldCount; $i++): ?>
                 <th><?=$fields[$i]['title'];?></th>
 <?php endfor; ?>

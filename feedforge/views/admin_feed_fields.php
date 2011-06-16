@@ -4,14 +4,14 @@
         <thead>
             <tr>
                 <th class="medium"></th>
-                <th class="large">Field Tag Name</th>
-                <th class="large">Field Title</th>
-                <th class="large">Field Type</th>
+                <th class="large">Title</th>
+                <th class="large">Tag Name</th>
+                <th class="large">Type</th>
             </tr>
         </thead>
         <tbody>
 <?php foreach($fields as $field): ?>
-            <tr><td class='center'><a href='#' title='Edit' onclick='return edit_field(<?=$feed['id'];?>, <?=$field['id'];?>, "<?=$field['title'];?>", <?=$field['feed_field_type_id'];?>)'>(E)</a>&nbsp;&nbsp;<a href='#' title='Delete' onclick="return delete_field(<?=$feed['id'];?>, <?=$field['id'];?>)">(X)</a></td><td><?=$field['short'];?></td><td><?=$field['title'];?></td><td><?=$field['type_name'];?></td></tr>
+            <tr><td class='center'><a href='#' title='Edit' onclick='return edit_field(<?=$feed['id'];?>, <?=$field['id'];?>, "<?=$field['title'];?>", <?=$field['feed_field_type_id'];?>)'>(E)</a>&nbsp;&nbsp;<a href='#' title='Delete' onclick="return delete_field(<?=$feed['id'];?>, <?=$field['id'];?>)">(X)</a></td><td><?=$field['title'];?></td><td><?=$field['short'];?></td><td><?=$field['type_name'];?></td></tr>
 <?php
     endforeach;
     if(empty($fields)):

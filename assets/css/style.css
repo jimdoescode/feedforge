@@ -1,0 +1,12 @@
+#main {
+	margin: 15px auto;
+	width: 960px;
+	padding: 15px;
+	border: 1px solid #ddd;
+}
+	#main h1 {
+		padding-bottom: 15px;
+		margin-bottom: 15px;
+		border-bottom: 1px solid #ddd;
+		background: #fff url(../admin/logo.png) top right no-repeat;
+	}

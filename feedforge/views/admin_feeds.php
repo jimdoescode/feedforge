@@ -4,9 +4,9 @@
         <thead>
             <tr>
                 <th class="small"></th>
-                <th class="medium center">Feed ID</th>
-                <th class="large">Feed Title</th>
-                <th class="large">Feed Tag Name</th>
+                <th class="small center">ID</th>
+                <th class="large">Title</th>
+                <th class="large">Tag Name</th>
                 <th></th>
             </tr>
         </thead>
