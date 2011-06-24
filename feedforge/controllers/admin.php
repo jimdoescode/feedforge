@@ -11,11 +11,23 @@ class Admin extends CI_Controller
         
         $this->load->model('feed_model');
         $this->load->model('variable_model');
+        /*$this->load->library('');
+        if($this->config->load('admin_auth', false, true))
+        {
+            
+        }
+        else $this->create_account();*/
     }
     
     private function _render($title, $page)
     {
         $this->load->view('admin_template', array('title'=>$title, 'page'=>$page));
+    }
+    
+    function create_account()
+    {
+        $this->config->set_item('encryption_key', uniqid());
+        echo "CREATE ACCOUNT";
     }
     
     function index()
