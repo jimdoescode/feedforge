@@ -73,7 +73,7 @@ table {
 	table .center {text-align: center;}
 	table .right {text-align: right;}
 ul {list-style-type: none;}
-#logo {text-align: middle;}
+#logo {text-align: center;}
 #main {min-height: 500px;}
 	#main .fade {
 		padding: 20px;
