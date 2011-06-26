@@ -21,5 +21,16 @@ $config['separator'] = 'dash';
 */
 $config['cache_expiration'] = 0.1;
 
+/*
+|--------------------------------------------------------------------------
+| Admin Credentials
+|--------------------------------------------------------------------------
+|
+| Credentials used to login to the admin panel.
+|
+*/
+$config['admin_user'] = '';
+$config['admin_password'] = '';
+$config['admin_salt'] = '';
 
 ?>

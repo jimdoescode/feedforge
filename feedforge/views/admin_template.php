@@ -16,13 +16,17 @@
     <section>
         <header>
             <img id="logo" src="<?=site_url('assets/admin/logo.png');?>" alt=''/>
+<?php if($this->uri->segment(2) != 'login'): ?>			
             <ul id="nav">
                 <li><a href="<?=site_url('admin/feeds');?>" title="Feed Admin">Feeds</a></li>
                 <li class='spacer'>/</li>
                 <li><a href="<?=site_url('admin/variables');?>" title="Variable Admin">Variables</a></li>
                 <li class='spacer'>/</li>
                 <li><a href="<?=site_url('admin/config');?>" title="Config Admin">Config</a></li>
+				<li class='spacer'>/</li>
+                <li><a href="<?=site_url('admin/logout');?>" title="Logout">Logout</a></li>
             </ul>
+<?php endif; ?>
         </header>
     </section>
     <section id="main">

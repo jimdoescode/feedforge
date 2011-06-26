@@ -38,7 +38,7 @@ class FF_Config extends CI_Config
     
     private function _replace_line($path, $item, $value, $config = '$config')
     {
-        $lines = file($path);
+        $lines = file($path, FILE_IGNORE_NEW_LINES);
         $count = count($lines);
         for($i=0; $i < $count; $i++)
         {

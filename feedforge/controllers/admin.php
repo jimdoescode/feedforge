@@ -8,15 +8,11 @@ class Admin extends CI_Controller
         
         //TODO: Put a check in here to make sure if they aren't authenticated 
         //that they are redirected to an authentication page.
+        $this->_check_encryption_key();
         
+        $this->load->library('session');
         $this->load->model('feed_model');
         $this->load->model('variable_model');
-        /*$this->load->library('');
-        if($this->config->load('admin_auth', false, true))
-        {
-            
-        }
-        else $this->create_account();*/
     }
     
     private function _render($title, $page)
@@ -24,14 +20,102 @@ class Admin extends CI_Controller
         $this->load->view('admin_template', array('title'=>$title, 'page'=>$page));
     }
     
-    function create_account()
+    private function _check_encryption_key()
     {
-        $this->config->set_item('encryption_key', uniqid());
-        echo "CREATE ACCOUNT";
+        if(strlen($this->config->item('encryption_key')) == 0)
+        {
+            $this->load->helper('string');
+            $id = random_string('alnum', 32);
+            $this->config->set_item('config', 'encryption_key', "'{$id}'");     
+        }
+    }
+    
+    private function _check_login()
+    {
+        if($this->_has_login())
+        {
+            $user = $this->session->userdata('admin_user');
+            $pass = $this->session->userdata('admin_password');
+            return ($user === $this->config->item('admin_user') && $pass === $this->config->item('admin_password'));
+        }
+        else return false;
+    }
+    
+    private function _has_login()
+    {
+        $user = trim($this->config->item('admin_user'));
+        $pass = trim($this->config->item('admin_password'));
+        $salt = trim($this->config->item('admin_salt'));
+        return (strlen($user) > 0 && strlen($pass) > 0 && strlen($salt) > 0);
+    }
+    
+    function logout()
+    {
+        $this->session->unset_userdata('admin_user');
+        $this->session->unset_userdata('admin_password');
+        redirect('admin/login');
+    }
+    
+    function login()
+    {
+        $this->load->library('form_validation');
+        $this->form_validation->set_message('required', 'Required');
+        $this->form_validation->set_error_delimiters('<span class="error">', '</span>');
+        $this->form_validation->set_rules('username', 'User Name', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean');
+
+        if($this->form_validation->run())
+        {
+            if(!$this->_has_login())
+            {
+                $this->load->helper('string');
+                $salt = random_string('alnum', 22);
+                $pass = $this->_hash_pw($this->input->post('password'), $salt);
+                $user = $this->input->post('username');
+                
+                $this->config->set_item('feedforge', 'admin_user', "'{$user}'");
+                $this->config->set_item('feedforge', 'admin_password', "'{$pass}'");
+                $this->config->set_item('feedforge', 'admin_salt', "'{$salt}'");
+                
+                $this->session->set_userdata(array('admin_user'=>$user, 'admin_password'=>$pass));
+                redirect('admin');
+            }
+            else
+            {
+                $user = $this->input->post('username');
+                $pass = $this->_hash_pw($this->input->post('password'));
+                if($user == $this->config->item('admin_user') && $pass == $this->config->item('admin_password'))
+                {
+                    $this->session->set_userdata(array('admin_user'=>$user, 'admin_password'=>$pass));
+                    redirect('admin');
+                }
+            }
+        }
+        else
+        {
+            if(!$this->_has_login())$this->_render('Please Create an Account', $this->load->view('admin_login', array('first_time'=>true), true));
+            else $this->_render('Please Login', $this->load->view('admin_login', array('first_time'=>false), true));
+        }
+    }
+    
+    private function _hash_pw($pw, $salt = false)
+    {
+        if($salt === false)$salt = $this->config->item('admin_salt');
+        //Hopefully they have at least one of these hashing algorithms available.
+        if(defined('CRYPT_BLOWFISH') && CRYPT_BLOWFISH == 1)$pw = crypt($pw, '$2a$10$'.$salt);
+        elseif(defined('CRYPT_SHA512') && CRYPT_SHA512 == 1)$pw = crypt($pw, '$6$rounds=5000$'.$salt);
+        elseif(defined('CRYPT_SHA256') && CRYPT_SHA256 == 1)$pw = crypt($pw, '$5$rounds=5000$'.$salt);
+        else //Pretty crappy but it is a last resort.
+        {
+            for($i=0; $i < 1000; $i++)
+                $pw = sha1($pw.$salt);
+        }
+        return $pw;
     }
     
     function index()
     {
+        if(!$this->_has_login() || !$this->_check_login())redirect('admin/login');
         $this->_render('Welcome', $this->load->view('admin_home', null, true));
     }
     
@@ -44,6 +128,7 @@ class Admin extends CI_Controller
     
     function feeds()
     {
+        if(!$this->_has_login() || !$this->_check_login())redirect('admin/login');
         $feeds = $this->_get_feed_data(true);
         if($feeds === false)$feeds = array();
         $this->_render('Feeds', $this->load->view('admin_feeds', array('feeds'=>$feeds), true));
@@ -51,6 +136,7 @@ class Admin extends CI_Controller
     
     function modify_feeds()
     {
+        if(!$this->_has_login() || !$this->_check_login())redirect('admin/login');
         $feedid = $this->input->post('id');
         $title = $this->input->post('title');
         
@@ -65,6 +151,7 @@ class Admin extends CI_Controller
     
     function delete_feed()
     {
+        if(!$this->_has_login() || !$this->_check_login())redirect('admin/login');
         $feedid = $this->input->post('id');
         $this->feed_model->delete_feed($feedid);
         header('application/json');
@@ -84,12 +171,14 @@ class Admin extends CI_Controller
     
     function feed_fields($feedid)
     {
+        if(!$this->_has_login() || !$this->_check_login())redirect('admin/login');
         $data = $this->_get_feed_field_data($feedid, true);
         $this->_render('Feed Fields', $this->load->view('admin_feed_fields', $data, true));
     }
     
     function modify_feed_fields($feedid)
     {
+        if(!$this->_has_login() || !$this->_check_login())redirect('admin/login');
         $fieldid = $this->input->post('id');
         $title = $this->input->post('title');
         $typeid = $this->input->post('type');
@@ -105,6 +194,7 @@ class Admin extends CI_Controller
     
     function delete_feed_field($feedid)
     {
+        if(!$this->_has_login() || !$this->_check_login())redirect('admin/login');
         $fieldid = $this->input->post('id');
         $this->feed_model->delete_feed_field($feedid, $fieldid);
         header('application/json');
@@ -128,6 +218,7 @@ class Admin extends CI_Controller
     
     function feed_entries($feedid)
     {
+        if(!$this->_has_login() || !$this->_check_login())redirect('admin/login');
         $data = $this->_get_feed_entries($feedid, true);
         
         $fieldcount = count($data['fields']);
@@ -142,6 +233,7 @@ class Admin extends CI_Controller
     
     function modify_feed_entries($feedid)
     {
+        if(!$this->_has_login() || !$this->_check_login())redirect('admin/login');
         $entryid = $this->input->post('id');
         //Diff the post array to prevent messing up relations via changing id values.
         $values = array_diff($_POST, array('id'=>$entryid));
@@ -165,6 +257,7 @@ class Admin extends CI_Controller
     
     function delete_feed_entry($feedid)
     {
+        if(!$this->_has_login() || !$this->_check_login())redirect('admin/login');
         $entryid = $this->input->post('id');
         $this->feed_model->delete_feed_entry($feedid, $entryid);
         header('application/json');
@@ -180,6 +273,7 @@ class Admin extends CI_Controller
     
     function variables()
     {
+        if(!$this->_has_login() || !$this->_check_login())redirect('admin/login');
         $vars = $this->_get_variable_data(true);
         if($vars === false)$vars = array();
         $this->_render('Variables', $this->load->view('admin_variables', array('variables'=>$vars), true));
@@ -187,6 +281,7 @@ class Admin extends CI_Controller
     
     function modify_variables()
     {
+        if(!$this->_has_login() || !$this->_check_login())redirect('admin/login');
         $id = $this->input->post('id');
         $title = $this->input->post('title');
         $value = $this->input->post('value');
@@ -202,6 +297,7 @@ class Admin extends CI_Controller
     
     function delete_variable()
     {
+        if(!$this->_has_login() || !$this->_check_login())redirect('admin/login');
         $id = $this->input->post('id');
         $this->variable_model->delete_variable($id);
         header('application/json');

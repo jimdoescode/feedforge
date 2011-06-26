@@ -224,7 +224,7 @@ $config['cache_path'] = 'feedforge/cache/';
 | MUST set an encryption key.  See the user guide for info.
 |
 */
-$config['encryption_key'] = 'thisshouldbeupdatedbytheinstaller'; //Perhaps use a unique id.
+$config['encryption_key'] = '';
 
 /*
 |--------------------------------------------------------------------------

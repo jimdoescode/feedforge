@@ -73,6 +73,19 @@ table {
 	table .center {text-align: center;}
 	table .right {text-align: right;}
 ul {list-style-type: none;}
+#login {
+	margin-top: 15px;
+	padding: 15px;
+}
+	#login dl {width: 400px;}
+	#login dd {margin-bottom: 15px;}
+	#login input {
+		font-size: 16px;
+		width: 100%;
+	}
+	#login input[type="submit"] {width: auto;}
+	
+	
 #logo {text-align: center;}
 #main {min-height: 500px;}
 	#main .fade {
