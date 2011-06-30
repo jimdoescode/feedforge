@@ -222,11 +222,9 @@ class Admin extends CI_Controller
         $data = $this->_get_feed_entries($feedid, true);
         
         $fieldcount = count($data['fields']);
+        $this->load->driver('field_type');
         for($i=0; $i < $fieldcount; $i++)
-        {
-            $this->load->library('field_types/'.$data['fields'][$i]['library'], null, 'field');
-            $data['fields'][$i]['input'] = $this->field->display_admin_input($data['fields'][$i]['short']);
-        }
+            $data['fields'][$i]['input'] = $this->field_type->{$data['fields'][$i]['driver']}->display_admin_input($data['fields'][$i]['short']);
         
         $this->_render('Feed Entries', $this->load->view('admin_feed_entries', $data, true));
     }
@@ -240,10 +238,10 @@ class Admin extends CI_Controller
         
         //Perform field preprocessing on the input
         $fields = $this->feed_model->get_feed_fields($feedid);
+        $this->load->driver('field_type');
         foreach($fields as $field)
         {
-            $this->load->library('field_types/'.$field['library'], null, 'field');
-            $values[$field['short']] = $this->field->database_preprocess($values[$field['short']]);
+            $values[$field['short']] = $this->field_type->{$field['driver']}->database_preprocess($values[$field['short']]);
             //Remove any curly braces out of fear they might be feedforge tags.
             $values[$field['short']] = str_replace(array('{', '}'), '', $values[$field['short']]);
         }

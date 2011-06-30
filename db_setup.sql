@@ -85,10 +85,10 @@ INSERT INTO `ff_feed_field` VALUES(4, 1, 'cinco-de-mayo', 'Cinco De Mayo', 3);
 
 CREATE TABLE IF NOT EXISTS `ff_feed_field_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `library` varchar(32) NOT NULL,
+  `driver` varchar(32) NOT NULL,
   `title` varchar(32) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `library` (`library`),
+  UNIQUE KEY `driver` (`driver`),
   UNIQUE KEY `title` (`title`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 

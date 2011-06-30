@@ -1,7 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 //This library will do processing on date fields
-class date
+class Field_type_date extends CI_Driver
 {
     public function get_database_column_type()
     {

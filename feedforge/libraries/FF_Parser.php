@@ -8,6 +8,7 @@ class FF_Parser extends CI_Parser
     {
         $this->ci = get_instance();
         $this->ci->load->model('feed_model');
+        $this->ci->load->driver('field_type');
     }
     
     function parse_template($path, $globals = false, $merged = false)
@@ -75,7 +76,16 @@ class FF_Parser extends CI_Parser
         $template = '';
         if($types !== false)
         {
-            $entries = $this->ci->feed_model->get_template_feed_entries($feed);//TODO Allow passing in parameters to the tag
+            $entries = false;
+            if(is_array($feedparams))
+            {
+                $count = array_key_exists('count', $feedparams) ? $feedparams['count'] : 30;
+                $start = array_key_exists('start', $feedparams) ? $feedparams['start'] : 0;
+                $feedparams = array_diff_key($feedparams, array('count'=>false, 'start'=>false));//It really doesn't matter what the values of the diff array are.
+                
+                $entries = $this->ci->feed_model->get_template_feed_entries($feed, $feedparams, $count, $start);
+            }
+            else $entries = $this->ci->feed_model->get_template_feed_entries($feed);
             if($entries !== false)
             {
                 $count = count($entries);
@@ -87,13 +97,10 @@ class FF_Parser extends CI_Parser
                         //If we don't have any tag data then ignore this tag.
                         if(!array_key_exists($key, $tagdata))continue;
                         //If we have a type then we will display the value from it.
-                        if(array_key_exists($key, $types))
-                        {
-                            $this->ci->load->library('field_types/'.$types[$key], null, 'format');
-                            if(is_array($tagdata[$key]))$val = $this->ci->format->display_tag_value($val, $tagdata[$key][1]);
-                            else $val = $this->ci->format->display_tag_value($val);
-                        }
-                        if(is_array($tagdata[$key]))$template = str_replace($tagdata[$key][0], $val, $template);
+                        $hastagdata = is_array($tagdata[$key]);
+                        if(array_key_exists($key, $types))$val = $this->ci->field_type->{$types[$key]}->display_tag_value($val, ($hastagdata ? $tagdata[$key][1] : false));
+                        
+                        if($hastagdata)$template = str_replace($tagdata[$key][0], $val, $template);
                         else $template = str_replace($tagdata[$key], $val, $template);
                     }
                 }
@@ -108,10 +115,9 @@ class FF_Parser extends CI_Parser
      **/
     private function _get_params($internal)
     {
-        $paramarray = array();
         preg_match_all("/([\w]*?)\s*=\s*{$this->quote}(.*?){$this->quote}/s", $internal, $params);
-        $paramarray = false;
         
+        $paramarray = false;
         if(count($params[0]) > 0)$paramarray = array_combine($params[1], $params[2]);
         return $paramarray;
     }

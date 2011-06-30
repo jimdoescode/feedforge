@@ -1,7 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 //This library will do processing on text fields 
-class small_text
+class Field_type_small_text extends CI_Driver
 {
     public function get_database_column_type()
     {

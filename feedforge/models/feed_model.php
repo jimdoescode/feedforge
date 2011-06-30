@@ -10,8 +10,8 @@ class Feed_model extends FF_Model
    
     private function _get_field_type($id)
     {
-        $query = $this->db->select('library')->where('id', $id)->get('ff_feed_field_type');
-        if($query->num_rows() > 0)return $query->row()->library;
+        $query = $this->db->select('driver')->where('id', $id)->get('ff_feed_field_type');
+        if($query->num_rows() > 0)return $query->row()->driver;
         return false;
     }
     
@@ -61,7 +61,7 @@ class Feed_model extends FF_Model
     
     function get_feed_fields($feedid)
     {
-        $sql = 'SELECT ff.*, fft.title AS type_name, fft.library FROM ff_feed_field ff, ff_feed_field_type fft WHERE ff.feed_id=? AND fft.id=ff.feed_field_type_id';
+        $sql = 'SELECT ff.*, fft.title AS type_name, fft.driver FROM ff_feed_field ff, ff_feed_field_type fft WHERE ff.feed_id=? AND fft.id=ff.feed_field_type_id';
         $query = $this->db->query($sql, array($feedid));
         if($query->num_rows() > 0)return $query->result_array();
         return false;
@@ -74,8 +74,8 @@ class Feed_model extends FF_Model
         $fieldshort = $this->_get_url_title($title);
         
         $this->db->insert('ff_feed_field', array('feed_id'=>$feedid, 'short'=>$fieldshort, 'title'=>$title, 'feed_field_type_id'=>$typeid));
-        $this->load->library('field_types/'.$typelib, null, 'field');
-        $this->dbforge->add_column($feedshort, array($fieldshort => $this->field->get_database_column_type()));
+        $this->load->driver('field_type');
+        $this->dbforge->add_column($feedshort, array($fieldshort => $this->field_type->{$typelib}->get_database_column_type()));
     }
     
     function update_feed_field($feedid, $fieldid, $title, $typeid)
@@ -86,8 +86,8 @@ class Feed_model extends FF_Model
         $newshort = $this->_get_url_title($title);
         
         $this->db->update('ff_feed_field', array('title'=>$title, 'short'=>$newshort, 'feed_field_type_id'=>$typeid), array('id'=>$fieldid));
-        $this->load->library('field_types/'.$typelib, null, 'field');
-        $fielddata = array_merge($this->field->get_database_column_type(), array('name'=>$newshort));
+        $this->load->driver('field_type');
+        $fielddata = array_merge($this->field_type->{$typelib}->get_database_column_type(), array('name'=>$newshort));
         $this->dbforge->modify_column($feedshort, array($fieldshort=>$fielddata));
     }
     
@@ -100,10 +100,20 @@ class Feed_model extends FF_Model
         $this->dbforge->drop_column($feedshort, $fieldshort);
     }
     
-    function get_field_types()
+    function get_field_types($justdrivers = false)
     {
         $query = $this->db->get('ff_feed_field_type');
-        if($query->num_rows() > 0)return $query->result_array();
+        if($query->num_rows() > 0)
+        {
+            if(!$justdrivers)return $query->result_array();
+            else
+            {
+                $drivers = array();
+                foreach($query->result_array() as $row)
+                    array_push($drivers, 'field_type_'.$row['driver']);
+                return $drivers;
+            }
+        }
         return false;
     }
     
@@ -134,7 +144,7 @@ class Feed_model extends FF_Model
     
     function get_feed_entry_types($feedshort)
     {
-        $sql = 'SELECT ff.short, fft.library FROM ff_feed f, ff_feed_field ff, ff_feed_field_type fft WHERE f.short=? AND ff.feed_id=f.id AND fft.id=ff.feed_field_type_id';
+        $sql = 'SELECT ff.short, fft.driver FROM ff_feed f, ff_feed_field ff, ff_feed_field_type fft WHERE f.short=? AND ff.feed_id=f.id AND fft.id=ff.feed_field_type_id';
         $query = $this->db->query($sql, array($feedshort));
         
         if($query->num_rows() > 0)
@@ -142,7 +152,7 @@ class Feed_model extends FF_Model
             $types = array();
             $results = $query->result_array();
             foreach($results as $result)
-                $types[$result['short']] = $result['library'];
+                $types[$result['short']] = $result['driver'];
             return $types;
         }
         return false;

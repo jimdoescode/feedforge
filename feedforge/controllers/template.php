@@ -21,7 +21,7 @@ class Template extends CI_Controller
         $template = $this->parser->parse_template($path, $variables);
         //Assume they are specifying a directory so add the index file
         if($template === false)$template = $this->parser->parse_template($path.'/index', $variables);
-        //If we found a template show it otherwise 404 their ass.
+        //If we found a template show it otherwise 404 they're ass.
         if($template !== false)echo $template;
         else show_404();
     }
