@@ -46,7 +46,7 @@ class FF_Parser extends CI_Parser
         $reg = "/\\{$this->l_delim}ff:merge\s*=\s*{$this->quote}(.+?){$this->quote}\s*(.*?)\\{$this->r_delim}/s";
         preg_match_all($reg, $template, $mergedata);
         $mergecount = count($mergedata[0]);
-        for($i=0; $i < $mergecount; $i++)
+        for($i=0; $i < $mergecount; ++$i)
         {
             $params = $this->_get_params($mergedata[2][$i]);
             $subtemplate = $this->parse_template($mergedata[1][$i], $params, true);
@@ -60,7 +60,7 @@ class FF_Parser extends CI_Parser
         $reg = "/\\{$this->l_delim}ff:feed\s*=\s*{$this->quote}(.+?){$this->quote}\s*(.*?)\\{$this->r_delim}(.+?)\\{$this->l_delim}\/ff:feed\\{$this->r_delim}/s";
         preg_match_all($reg, $template, $feeddata);
         $feedcount = count($feeddata[0]);
-        for($i=0; $i < $feedcount; $i++)
+        for($i=0; $i < $feedcount; ++$i)
         {
             $params = $this->_get_params($feeddata[2][$i]);
             $tags = $this->_get_tags($feeddata[3][$i]);
@@ -89,7 +89,7 @@ class FF_Parser extends CI_Parser
             if($entries !== false)
             {
                 $count = count($entries);
-                for($i=0; $i < $count; $i++)
+                for($i=0; $i < $count; ++$i)
                 {
                     $template .= $segment;
                     foreach($entries[$i] as $key => $val)
@@ -97,11 +97,20 @@ class FF_Parser extends CI_Parser
                         //If we don't have any tag data then ignore this tag.
                         if(!array_key_exists($key, $tagdata))continue;
                         //If we have a type then we will display the value from it.
-                        $hastagdata = is_array($tagdata[$key]);
-                        if(array_key_exists($key, $types))$val = $this->ci->field_type->{$types[$key]}->display_tag_value($val, ($hastagdata ? $tagdata[$key][1] : false));
-                        
-                        if($hastagdata)$template = str_replace($tagdata[$key][0], $val, $template);
-                        else $template = str_replace($tagdata[$key], $val, $template);
+                        if(is_array($tagdata[$key]))
+                        {
+                            $tagscount = count($tagdata[$key]);
+                            for($j=0; $j < $tagscount; ++$j)
+                            {
+                                if(array_key_exists($key, $types))$val = $this->ci->field_type->{$types[$key]}->display_tag_value($val, $tagdata[$key][$j][1]);
+                                $template = str_replace($tagdata[$key][$j][0], $val, $template);
+                            }
+                        }
+                        else
+                        {
+                            if(array_key_exists($key, $types))$val = $this->ci->field_type->{$types[$key]}->display_tag_value($val, false);
+                            $template = str_replace($tagdata[$key], $val, $template);
+                        }
                     }
                 }
             }
@@ -127,12 +136,13 @@ class FF_Parser extends CI_Parser
         $tagarray = array();
         preg_match_all("/\\{$this->l_delim}\s*([a-zA-Z0-9_\-]+)\s*(.*?)\\{$this->r_delim}/s", $internal, $tags);
         $tagcount = count($tags[0]);
-        for($i=0; $i < $tagcount; $i++)
+        for($i=0; $i < $tagcount; ++$i)
         {
             if(strlen($tags[2][$i]) > 0)
             {
                 $params = $this->_get_params($tags[2][$i]);
-                $tagarray[$tags[1][$i]] = array($tags[0][$i], $params);//TODO: This wont work in cases of multiple of the same tag with different params
+                if(array_key_exists($tags[1][$i], $tagarray))array_push($tagarray[$tags[1][$i]], array($tags[0][$i], $params));
+                else $tagarray[$tags[1][$i]] = array(array($tags[0][$i], $params));
             }
             else $tagarray[$tags[1][$i]] = $tags[0][$i];
         }
