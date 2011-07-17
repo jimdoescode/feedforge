@@ -29,8 +29,8 @@ $config['cache_expiration'] = 0.1;
 | Credentials used to login to the admin panel.
 |
 */
-$config['admin_user'] = '';
-$config['admin_password'] = '';
-$config['admin_salt'] = '';
+$config['admin_user'] = 'jim';
+$config['admin_password'] = '771ebd2bf5174f8a12914139cf9bdff0975066d0';
+$config['admin_salt'] = 'GkLJ5cDCHK3QAjc0hQCCRg';
 
 ?>

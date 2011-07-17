@@ -76,6 +76,7 @@ ul {list-style-type: none;}
 #login {
 	margin-top: 15px;
 	padding: 15px;
+	overflow: hidden;
 }
 	#login dl {width: 400px;}
 	#login dd {margin-bottom: 15px;}
@@ -84,7 +85,10 @@ ul {list-style-type: none;}
 		width: 100%;
 	}
 	#login input[type="submit"] {width: auto;}
-	
+	#login p {
+		margin: 0 0 0 35px;
+		width: 474px;
+	}
 	
 #logo {text-align: center;}
 #main {min-height: 500px;}

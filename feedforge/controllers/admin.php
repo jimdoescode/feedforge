@@ -13,6 +13,8 @@ class Admin extends CI_Controller
         $this->load->library('session');
         $this->load->model('feed_model');
         $this->load->model('variable_model');
+        $this->load->helper('language');
+        $this->lang->load('admin');
     }
     
     private function _render($title, $page)
