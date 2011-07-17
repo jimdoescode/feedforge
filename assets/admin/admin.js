@@ -97,7 +97,7 @@ function edit_entry(feedid, entryid, elm)
 	$(elm).parent().siblings('td.entry_column').each(function()
 	{
 		var id = $(this).attr('title');
-		var val = $(this).text();
+		var val = $(this).html();
 		$('#'+id).val(val);
 	});
 	
@@ -141,8 +141,8 @@ function delete_variable(varid)
 	return false;
 }
 
-//Will need to add input types to this as they arrive.
-//Should be good for now though.
+//Will need to add input types to this as they 
+//arrive. Should be good for now though.
 function reset_inputs(elmid)
 {
 	var today = new Date();
