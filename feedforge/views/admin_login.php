@@ -1,8 +1,4 @@
-<?php if($first_time): ?>
-<h1>Please Create an Admin Account</h1>
-<?php else: ?>
-<h1>Please Login</h1>
-<?php endif; ?>
+<h1><?=($first_time ? lang('admin_create_title') : lang('admin_login_title'));?></h1>
 <form id="login" class="green-border" action="<?=site_url('admin/login');?>" method="post">
     <dl class="column">
         <dt><label for="username">User Name <?=form_error('username');?></label></dt>
