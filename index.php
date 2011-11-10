@@ -71,11 +71,12 @@ if (defined('ENVIRONMENT'))
  *
  * NO TRAILING SLASH!
  *
- * Renamed from application to feedforge
+ * Renamed from application installer if the installer directory
+ * exists otherwise named feedforge.
  * Jim Saunders
  *
  */
-	$application_folder = 'feedforge';
+    $application_folder = is_dir('installer') ? 'installer':'feedforge';
 
 /*
  * --------------------------------------------------------------------

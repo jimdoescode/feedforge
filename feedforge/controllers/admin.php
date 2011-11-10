@@ -304,5 +304,3 @@ class Admin extends CI_Controller
         echo $this->_get_variable_data();
     }
 }
-
-?>

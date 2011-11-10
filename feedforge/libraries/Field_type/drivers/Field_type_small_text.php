@@ -3,9 +3,11 @@
 //This library will do processing on text fields 
 class Field_type_small_text extends CI_Driver
 {
+    const MAX_SIZE = 128;
+
     public function get_database_column_type()
     {
-        return array('type'=>'VARCHAR','constraint'=>128);
+        return array('type'=>'VARCHAR','constraint'=>self::MAX_SIZE);
     }
     
     public function database_preprocess($value)
@@ -15,7 +17,7 @@ class Field_type_small_text extends CI_Driver
     
     public function display_admin_input($name)
     {
-        return '<input type="text" name="'.$name.'" id="'.$name.'" maxsize="128"/>';
+        return '<input type="text" name="'.$name.'" id="'.$name.'" maxsize="'.self::MAX_SIZE.'"/>';
     }
     
     public function display_tag_value($value, $params = array())
