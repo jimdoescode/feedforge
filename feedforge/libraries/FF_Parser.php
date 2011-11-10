@@ -38,6 +38,14 @@ class FF_Parser extends CI_Parser
         return $template;
     }
 
+    /**
+     * Search for cache tags in the template if they are found the
+     * template is written to the cache and the tag is removed
+     * 
+     * @param $template
+     * @param $key
+     * @return string The updated template
+     */
     private function _parse_cache_tags($template, $key)
     {
         $reg = "/\\{$this->l_delim}ff:cache\s*(.*?)\s*\\/\\{$this->r_delim}/s";
