@@ -11,7 +11,7 @@
  **/
 class Scache
 {
-    function Scache($params)
+    function __construct()
     {
         $CI =& get_instance();
         //$CI->load->config('scache'); //config file moved to feedforge config
@@ -70,15 +70,16 @@ class Scache
      * @param string $key the unique identifier for the cache file.
      * @param string $input the data to cache.
      * @param bool $variable flag to determine if we should treat the input as PHP data.
+     * @param int $expiration (optional) Time to keep the input cached (if not specified the configured expiration is used)
      **/
-    function write($key, $input, $variable = false)
+    function write($key, $input, $variable = false, $expiration = false)
     {
         if(is_dir($this->path) && is_really_writable($this->path))
         {
             $cachepath = $this->path.md5($key);
             if($fp = @fopen($cachepath, FOPEN_WRITE_CREATE_DESTRUCTIVE))
             {
-                $expire = time() + ($this->expiration * 60);
+                $expire = time() + (($expiration === false ? $this->expiration : $expiration) * 60);
                 if(flock($fp, LOCK_EX))
                 {
 					if($variable)$input = json_encode($input);

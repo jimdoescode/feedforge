@@ -9,6 +9,7 @@ class FF_Parser extends CI_Parser
         $this->ci =& get_instance();
         $this->ci->load->model('feed_model');
         $this->ci->load->driver('field_type');
+        $this->ci->load->library('scache');
     }
     
     function parse_template($path, $globals = false, $merged = false)
@@ -16,21 +17,49 @@ class FF_Parser extends CI_Parser
         //Build the full path to the template and make sure it exists.
         $fullpath = TEMPPATH.$path.EXT;
         if(!file_exists($fullpath))return false;
-        if($globals === false)$globals = array();
-        //Get the initial file.
-        $template = $this->ci->load->file($fullpath, true);
-        //Fill in any global variables from a merge call
-        if($merged)$template = $this->_parse_globals($template, $globals, 'merge:var');
-        //Fill in any templates that are merged into this one
-        $template = $this->_parse_merges($template);
-        //Fill in any standard global variables.
-        $template = $this->_parse_globals($template, $globals);
-        //Fill in any feed data
-        $template = $this->_parse_feeds($template);
-        
+
+        //Check the cache using $fullpath as the key
+        if(!$template = $this->ci->scache->read($fullpath))
+        {
+            if($globals === false)$globals = array();
+            //Get the initial file.
+            $template = $this->ci->load->file($fullpath, true);
+            //Fill in any global variables from a merge call
+            if($merged)$template = $this->_parse_globals($template, $globals, 'merge:var');
+            //Fill in any templates that are merged into this one
+            $template = $this->_parse_merges($template);
+            //Fill in any standard global variables.
+            $template = $this->_parse_globals($template, $globals);
+            //Fill in any feed data
+            $template = $this->_parse_feeds($template);
+            //Check for any cache tags and create a cache if they exist.
+            $template = $this->_parse_cache_tags($template, $fullpath);
+        }
         return $template;
     }
-    
+
+    private function _parse_cache_tags($template, $key)
+    {
+        $reg = "/\\{$this->l_delim}ff:cache\s*(.*?)\s*\\/\\{$this->r_delim}/s";
+        if(preg_match($reg, $template, $cachedata))
+        {
+            $template = str_replace($cachedata[0], '', $template);
+            //Are there parameters?
+            if(isset($cachedata[1]))
+            {
+                $params = $this->_get_params($cachedata[1]);
+                //We only care about an expiration parameter.
+                if(is_array($params) && array_key_exists('expiration', $params))
+                {
+                    $this->ci->scache->write($key, $template, false, $params['expiration']);
+                    return $template;
+                }
+            }
+            $this->ci->scache->write($key, $template);
+        }
+        return $template;
+    }
+
     private function _parse_globals($template, $globals, $pre = 'ff:global')
     {
         $globalArray = array();

@@ -26,8 +26,8 @@
 		<p>
 			Entry values are accessed within feed tags as follows:<br/><br/>
 			{ff:feed="blogs"}<br/>
-			&lt;h1&gt;{title}&lt;/h1&gt;<br/>
-			&lt;p&gt;{body}&lt;/p&gt;<br/>
+			&lt;h1&gt;{title/}&lt;/h1&gt;<br/>
+			&lt;p&gt;{body/}&lt;/p&gt;<br/>
 			{/ff:feed}
 		</p>
 	</div>
@@ -40,7 +40,7 @@
 		</p>
 		<p>
 			You can use variables in your site by putting the following in your template:<br/><br/>
-			{ff:global="current-address"}
+			{ff:global="current-address"/}
 		</p>
 	</div>
 </article>
