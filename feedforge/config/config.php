@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/feedforge/';
+$config['base_url'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -224,7 +224,7 @@ $config['cache_path'] = 'feedforge/cache/';
 | MUST set an encryption key.  See the user guide for info.
 |
 */
-$config['encryption_key'] = 'qOJOxwG8hbHRuvaziFh6jLlkQNltEcuX';
+$config['encryption_key'] = '';
 
 /*
 |--------------------------------------------------------------------------

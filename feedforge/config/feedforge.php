@@ -19,7 +19,7 @@ $config['separator'] = 'dash';
 | How long a scache cache file should remain valid in minutes.
 |
 */
-$config['cache_expiration'] = 0.1;
+$config['cache_expiration'] = 1.0;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +32,3 @@ $config['cache_expiration'] = 0.1;
 $config['admin_user'] = '';
 $config['admin_password'] = '';
 $config['admin_salt'] = '';
-

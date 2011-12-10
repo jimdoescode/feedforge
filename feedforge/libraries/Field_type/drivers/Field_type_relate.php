@@ -50,4 +50,3 @@ class Field_type_relate extends CI_Driver
         return $output;
     }
 }
-

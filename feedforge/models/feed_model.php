@@ -7,14 +7,7 @@ class Feed_model extends FF_Model
         parent::__construct();
         $this->load->dbforge();
     }
-   
-    private function _get_field_type($id)
-    {
-        $query = $this->db->select('driver')->where('id', $id)->get('ff_feed_field_type');
-        if($query->num_rows() > 0)return $query->row()->driver;
-        return false;
-    }
-    
+
     function get_feed($feedid)
     {
         $query = $this->db->get_where('ff_feed', array('id'=>$feedid));
@@ -70,24 +63,22 @@ class Feed_model extends FF_Model
     function add_feed_field($feedid, $title, $typeid)
     {
         $feedshort = $this->_get_short($feedid, 'ff_feed');
-        $typelib = $this->_get_field_type($typeid);
         $fieldshort = $this->_get_url_title($title);
         
         $this->db->insert('ff_feed_field', array('feed_id'=>$feedid, 'short'=>$fieldshort, 'title'=>$title, 'feed_field_type_id'=>$typeid));
         $this->load->driver('field_type');
-        $this->dbforge->add_column($feedshort, array($fieldshort => $this->field_type->{$typelib}->get_database_column_type()));
+        $this->dbforge->add_column($feedshort, array($fieldshort => $this->field_type->get_database_column_type()));
     }
     
     function update_feed_field($feedid, $fieldid, $title, $typeid)
     {
         $feedshort = $this->_get_short($feedid, 'ff_feed');
         $fieldshort = $this->_get_short($fieldid, 'ff_feed_field');
-        $typelib = $this->_get_field_type($typeid);
         $newshort = $this->_get_url_title($title);
         
         $this->db->update('ff_feed_field', array('title'=>$title, 'short'=>$newshort, 'feed_field_type_id'=>$typeid), array('id'=>$fieldid));
         $this->load->driver('field_type');
-        $fielddata = array_merge($this->field_type->{$typelib}->get_database_column_type(), array('name'=>$newshort));
+        $fielddata = array_merge($this->field_type->get_database_column_type($typeid), array('name'=>$newshort));
         $this->dbforge->modify_column($feedshort, array($fieldshort=>$fielddata));
     }
     
@@ -98,23 +89,6 @@ class Feed_model extends FF_Model
         
         $this->db->delete('ff_feed_field', array('id' => $fieldid));
         $this->dbforge->drop_column($feedshort, $fieldshort);
-    }
-    
-    function get_field_types($justdrivers = false)
-    {
-        $query = $this->db->get('ff_feed_field_type');
-        if($query->num_rows() > 0)
-        {
-            if(!$justdrivers)return $query->result_array();
-            else
-            {
-                $drivers = array();
-                foreach($query->result_array() as $row)
-                    array_push($drivers, 'field_type_'.$row['driver']);
-                return $drivers;
-            }
-        }
-        return false;
     }
     
     function add_feed_entry($feedid, $entrydata)

@@ -28,7 +28,7 @@ class Admin extends CI_Controller
         {
             $this->load->helper('string');
             $id = random_string('alnum', 32);
-            $this->config->set_item('config', 'encryption_key', "'{$id}'");     
+            $this->config->replace_item('config', 'encryption_key', "'{$id}'");
         }
     }
     
@@ -66,38 +66,17 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('username', 'User Name', 'trim|required|xss_clean');
         $this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean');
 
-        if($this->form_validation->run())
+        if($this->form_validation->run() && $this->_has_login())
         {
-            if(!$this->_has_login())
+            $user = $this->input->post('username');
+            $pass = $this->_hash_pw($this->input->post('password'));
+            if($user == $this->config->item('admin_user') && $pass == $this->config->item('admin_password'))
             {
-                $this->load->helper('string');
-                $salt = random_string('alnum', 22);
-                $pass = $this->_hash_pw($this->input->post('password'), $salt);
-                $user = $this->input->post('username');
-                
-                $this->config->set_item('feedforge', 'admin_user', "'{$user}'");
-                $this->config->set_item('feedforge', 'admin_password', "'{$pass}'");
-                $this->config->set_item('feedforge', 'admin_salt', "'{$salt}'");
-                
                 $this->session->set_userdata(array('admin_user'=>$user, 'admin_password'=>$pass));
                 redirect('admin');
             }
-            else
-            {
-                $user = $this->input->post('username');
-                $pass = $this->_hash_pw($this->input->post('password'));
-                if($user == $this->config->item('admin_user') && $pass == $this->config->item('admin_password'))
-                {
-                    $this->session->set_userdata(array('admin_user'=>$user, 'admin_password'=>$pass));
-                    redirect('admin');
-                }
-            }
         }
-        else
-        {
-            if(!$this->_has_login())$this->_render('Please Create an Account', $this->load->view('admin_login', array('first_time'=>true), true));
-            else $this->_render('Please Login', $this->load->view('admin_login', array('first_time'=>false), true));
-        }
+        else $this->_render('Please Login', $this->load->view('admin_login', array(), true));
     }
     
     private function _hash_pw($pw, $salt = false)
@@ -162,10 +141,11 @@ class Admin extends CI_Controller
     
     private function _get_feed_field_data($feedid, $raw = false)
     {
+        $this->load->model('field_model');
         $feed = $this->feed_model->get_feed($feedid);
         $fields = $this->feed_model->get_feed_fields($feedid);
         if($fields === false)$fields = array();
-        $types = $this->feed_model->get_field_types();
+        $types = $this->field_model->get_field_types();
         $data = array('feed'=>$feed, 'types'=>$types, 'fields'=>$fields);
         if(!$raw)return json_encode($data);
         return $data;

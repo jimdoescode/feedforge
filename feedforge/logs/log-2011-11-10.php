@@ -14,3 +14,5 @@ ERROR - 2011-11-10 01:31:52 --> Severity: Notice  --> Array to string conversion
 ERROR - 2011-11-10 10:51:00 --> Severity: Warning  --> Missing argument 1 for Scache::Scache(), called in /Users/jim/Programs/htdocs/feedforge/system/core/Loader.php on line 950 and defined /Users/jim/Programs/htdocs/feedforge/feedforge/libraries/Scache.php 14
 ERROR - 2011-11-10 10:51:45 --> Severity: Warning  --> Missing argument 1 for Scache::__construct(), called in /Users/jim/Programs/htdocs/feedforge/system/core/Loader.php on line 950 and defined /Users/jim/Programs/htdocs/feedforge/feedforge/libraries/Scache.php 14
 ERROR - 2011-11-10 11:00:03 --> Severity: Warning  --> array_key_exists() [<a href='function.array-key-exists'>function.array-key-exists</a>]: The second argument should be either an array or an object /Users/jim/Programs/htdocs/feedforge/feedforge/libraries/FF_Parser.php 52
+ERROR - 2011-11-10 12:11:14 --> 404 Page Not Found --> admin/config
+ERROR - 2011-11-10 12:11:26 --> 404 Page Not Found --> admin/config

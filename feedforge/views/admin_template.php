@@ -22,8 +22,8 @@
                 <li class='spacer'>/</li>
                 <li><a href="<?=site_url('admin/variables');?>" title="Variable Admin">Variables</a></li>
                 <li class='spacer'>/</li>
-                <li><a href="<?=site_url('admin/config');?>" title="Config Admin">Config</a></li>
-				<li class='spacer'>/</li>
+                <!--<li><a href="<?=site_url('admin/config');?>" title="Config Admin">Config</a></li>
+				<li class='spacer'>/</li>-->
                 <li><a href="<?=site_url('admin/logout');?>" title="Logout">Logout</a></li>
             </ul>
 <?php endif; ?>

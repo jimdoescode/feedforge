@@ -14,7 +14,7 @@ class FF_Config extends CI_Config
      * NOTE: value has to be a string so if you need to encode a config
      * value that is already a string you have to add escaped quotes.
      **/
-    function set_item($file, $item, $value)
+    function replace_item($file, $item, $value)
 	{
         foreach($this->_config_paths as $path)
 		{
