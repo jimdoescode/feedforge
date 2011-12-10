@@ -3,11 +3,9 @@
 //This library will do processing on text fields 
 class Field_type_large_text extends CI_Driver
 {
-    const MAX_SIZE = 1024;
-
     public function get_database_column_type()
     {
-        return array('type'=>'VARCHAR','constraint'=>self::MAX_SIZE);
+        return array('type'=>'TEXT');
     }
     
     public function database_preprocess($value)

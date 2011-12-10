@@ -91,7 +91,7 @@ class Install_model extends CI_Model
         $this->dbforge->add_field(array(
             'id'=>array('type'=>'INT','constraint'=>11,'unsigned'=>true,'auto_increment'=>true),
             'welcome-text'=>array('type'=>'VARCHAR','constraint'=>128,'null'=>true),
-            'welcome-message'=>array('type'=>'VARCHAR','constraint'=>1024,'null'=>true),
+            'welcome-message'=>array('type'=>'TEXT','null'=>true),
             'cinco-de-mayo'=>array('type'=>'DATE','null'=>true),
             'relation'=>array('type'=>'VARCHAR','constraint'=>32)
         ));

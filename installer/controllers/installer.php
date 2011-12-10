@@ -37,8 +37,8 @@ class Installer extends CI_Controller
     private function _write_database_config($user, $password, $host, $database, $driver = 'mysql')
     {
         $str = '<?php  if ( ! defined(\'BASEPATH\')) exit(\'No direct script access allowed\');'.PHP_EOL.PHP_EOL;
-        $str .= '$active_group = "default"'."\r\n";
-        $str .= '$active_record = TRUE'."\r\n";
+        $str .= '$active_group = "default";'.PHP_EOL;
+        $str .= '$active_record = TRUE;'.PHP_EOL.PHP_EOL;
         $str .= '$db[\'default\'][\'hostname\'] = "'.$host.'";'.PHP_EOL;
         $str .= '$db[\'default\'][\'username\'] = "'.$user.'";'.PHP_EOL;
         $str .= '$db[\'default\'][\'password\'] = "'.$password.'";'.PHP_EOL;

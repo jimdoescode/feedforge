@@ -12,7 +12,7 @@ class FF_Parser extends CI_Parser
         $this->ci->load->library('scache');
     }
     
-    function parse_template($path, $globals = false, $merged = false)
+    function parse_template($path, $globals = false)
     {
         //Build the full path to the template and make sure it exists.
         $fullpath = TEMPPATH.$path.EXT;
@@ -25,9 +25,9 @@ class FF_Parser extends CI_Parser
             //Get the initial file.
             $template = $this->ci->load->file($fullpath, true);
             //Fill in any global variables from a merge call
-            if($merged)$template = $this->_parse_globals($template, $globals, 'merge:var');
+            //if($merged)$template = $this->_parse_globals($template, $globals, 'merge:var');
             //Fill in any templates that are merged into this one
-            $template = $this->_parse_merges($template);
+            $template = $this->_parse_merges($template, $globals);
             //Fill in any standard global variables.
             $template = $this->_parse_globals($template, $globals);
             //Fill in any feed data
@@ -80,7 +80,7 @@ class FF_Parser extends CI_Parser
         return $template;
     }
     
-    private function _parse_merges($template)
+    private function _parse_merges($template, $globals)
     {
         $reg = "/\\{$this->l_delim}ff:merge\s*=\s*{$this->quote}(.+?){$this->quote}\s*(.*?)\\/\\{$this->r_delim}/s";
         preg_match_all($reg, $template, $mergedata);
@@ -88,7 +88,8 @@ class FF_Parser extends CI_Parser
         for($i=0; $i < $mergecount; ++$i)
         {
             $params = $this->_get_params($mergedata[2][$i]);
-            $subtemplate = $this->parse_template($mergedata[1][$i], $params, true);
+            if(is_array($params))$params = array_merge($params, $globals);
+            $subtemplate = $this->parse_template($mergedata[1][$i], $params);
             if($subtemplate !== false)$template = str_replace($mergedata[0][$i], $subtemplate, $template);
         }
         return $template;

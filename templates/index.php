@@ -6,7 +6,7 @@
         <p>{welcome-message/}</p>
         <p><strong>Cinco De Mayo: </strong>{cinco-de-mayo format="n/j/Y"/}</p>
         {relation}
-        <strong>{test-related/}</strong>
+        <strong>{test-related/}</strong><br/>
         {/relation}
 {/ff:feed}
     </div>
