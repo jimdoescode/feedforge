@@ -25,7 +25,7 @@ class FF_Parser extends CI_Parser
             //Get the initial file.
             $template = $this->ci->load->file($fullpath, true);
             //Fill in any global variables from a merge call
-            //if($merged)$template = $this->_parse_globals($template, $globals, 'merge:var');
+            $template = $this->_parse_paths($template);
             //Fill in any templates that are merged into this one
             $template = $this->_parse_merges($template, $globals);
             //Fill in any standard global variables.
@@ -34,6 +34,26 @@ class FF_Parser extends CI_Parser
             $template = $this->_parse_feeds($template);
             //Check for any cache tags and create a cache if they exist.
             $template = $this->_parse_cache_tags($template, $fullpath);
+        }
+        return $template;
+    }
+
+    /**
+     * Search for path tags in the template if they are found the
+     * path is updated with the full path info.
+     *
+     * @param $template
+     * @return string The updated template
+     */
+    private function _parse_paths($template)
+    {
+        $reg = "/\\{$this->l_delim}ff:path\s*=\s*{$this->quote}(.+?){$this->quote}\s*(.*?)\\/\\{$this->r_delim}/s";
+        preg_match_all($reg, $template, $data);
+        $count = count($data[0]);
+        for($i=0; $i < $count; ++$i)
+        {
+            $path = site_url($data[1][$i]);
+            $template = str_replace($data[0][$i], $path, $template);
         }
         return $template;
     }
