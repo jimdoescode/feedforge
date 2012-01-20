@@ -17,7 +17,7 @@ class INSTALL_Config extends CI_Config
     function replace_item($file, $item, $value)
 	{
         $file_path = 'feedforge/config/'.$file.EXT;
-        if(file_exists($file_path) && $this->_replace_line($file_path, $item, $value))
+        if(file_exists($file_path) && $this->_replace_line($file_path, $item, "'".$value."'"))
         {
             $this->config[$item] = $value;
             return true;

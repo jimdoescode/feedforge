@@ -77,14 +77,13 @@ class Installer extends CI_Controller
                 $success = true;
                 $id = random_string('alnum', 32);
 
-                if($success)$success = $this->config->replace_item('config', 'base_url', "'{$baseurl}'");
-                if($success)$success = $this->config->replace_item('config', 'encryption_key', "'{$id}'");
-                if($success)$success = $this->config->replace_item('feedforge', 'admin_user', "'".$this->input->post('username')."'");
-                if($success)$success = $this->config->replace_item('feedforge', 'admin_password', "'{$pwdata['password']}'");
-                if($success)$success = $this->config->replace_item('feedforge', 'admin_salt', "'{$pwdata['salt']}'");
+                if($success)$success = $this->config->replace_item('config', 'base_url', $baseurl);
+                if($success)$success = $this->config->replace_item('config', 'encryption_key', $id);
+                if($success)$success = $this->config->replace_item('feedforge', 'admin_user', $this->input->post('username'));
+                if($success)$success = $this->config->replace_item('feedforge', 'admin_password', $pwdata['password']);
+                if($success)$success = $this->config->replace_item('feedforge', 'admin_salt', $pwdata['salt']);
                 //Everything worked great so move on to step 2
-                $this->session->set_userdata('baseurl', $baseurl);
-                if($success)redirect($baseurl.'installer/step/2');
+                if($success)redirect(site_url('installer/step/2'));
 
                 else die("Could not write to config files.");
             }
@@ -107,14 +106,11 @@ class Installer extends CI_Controller
                 if($success)$success = $this->_write_database_config($user, $pass, $host, $name);
                 if($success)$success = $this->install_model->create_database($user, $pass, $host, $name);
                 //Everything worked so take them to the finish screen
-                if($success)redirect($this->session->userdata('baseurl').'installer/step/finished');
-                else $this->_render($this->load->view('step_2', array(), true));;
+                if($success)redirect(site_url('installer/step/finished'));
+                else $this->_render($this->load->view('step_2', array(), true));
             }
             else $this->_render($this->load->view('step_2', array(), true));
         }
-        else
-        {
-            $this->_render($this->load->view('finish', array(), true));
-        }
+        else $this->_render($this->load->view('finish', array(), true));
     }
 }

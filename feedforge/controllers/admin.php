@@ -40,7 +40,7 @@ class Admin extends CI_Controller
             $pass = $this->session->userdata('admin_password');
             return ($user === $this->config->item('admin_user') && $pass === $this->config->item('admin_password'));
         }
-        else return false;
+        return false;
     }
     
     private function _has_login()
@@ -96,7 +96,7 @@ class Admin extends CI_Controller
     
     function index()
     {
-        if(!$this->_has_login() || !$this->_check_login())redirect('admin/login');
+        if(!$this->_check_login())redirect('admin/login');
         $this->_render('Welcome', $this->load->view('admin_home', null, true));
     }
     

@@ -99,7 +99,7 @@ class Install_model extends CI_Model
         $this->dbforge->create_table('demo-feed', true);
         $demo = array(
             array('welcome-text'=>'Welcome to Feed Forge',
-                  'welcome-message'=>'This message is being generated via a feed called \'demo-feed\' and a single entry. You can see how the template uses feed tags by going to the templates directory located in the root directory. You can also add or update feeds by going to the <a href="admin">admin</a> screen.',
+                  'welcome-message'=>'This message is being generated via a feed called \'demo-feed\' and a single entry. You can see how the template uses feed tags by going to the templates directory located in the root directory. You can also add or update feeds by going to the <a href="'.site_url('admin').'">admin</a> screen.',
                   'cinco-de-mayo'=>'2011-05-05',
                   'relation'=>'related-feed'
             )

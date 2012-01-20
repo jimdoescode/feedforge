@@ -36,6 +36,16 @@ define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
+//Attempt to determine the correct base url to resolve to.
+$base_url = (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on') ? 'https' : 'http';
+$base_url .= isset($_SERVER['HTTP_HOST']) ? "://{$_SERVER['HTTP_HOST']}" : '://localhost';
+$base_url .= isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+$base_url .= substr($base_url, -1) == '/' ? '' : '/';
+//Remove trailing index.php if it is there.
+if(stripos($base_url, 'index.php'))$base_url = substr($base_url, 0, stripos($base_url, 'index.php'));
+
+define('BASE_URL', $base_url);
+unset($base_url);
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
