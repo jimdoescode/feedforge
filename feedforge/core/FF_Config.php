@@ -24,7 +24,7 @@ class FF_Config extends CI_Config
                 $file_path = $path.'config/'.$location.EXT;
 				if(file_exists($file_path))
 				{
-			        if($this->_replace_line($file_path, $item, $value))
+			        if($this->_replace_line($file_path, $item, "'".$value."'"))
                     {
                         $this->config[$item] = $value;
                         return true;

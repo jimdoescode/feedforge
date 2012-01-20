@@ -65,7 +65,7 @@ class Install_model extends CI_Model
         $this->dbforge->add_field(array(
             'session_id'=>array('type'=>'VARCHAR','constraint'=>40,'default'=>'0'),
             'ip_address'=>array('type'=>'VARCHAR','constraint'=>16,'default'=>'0'),
-            'user_agent'=>array('type'=>'VARCHAR','constraint'=>50),
+            'user_agent'=>array('type'=>'VARCHAR','constraint'=>120),
             'last_activity'=>array('type'=>'INT','constraint'=>10,'unsigned'=>true,'default'=>0),
             'user_data'=>array('type'=>'TEXT')
         ));
