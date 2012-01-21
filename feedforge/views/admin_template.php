@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="<?=base_url('assets/admin/admin.css');?>"/>
 	<link rel="stylesheet" type="text/css" href="<?=base_url('assets/admin/fancybox/jquery.fancybox.css');?>" media="screen"/>
     <script type="text/javascript">
-	var SITE = '<?=site_url();?>';
+	var SITE = '<?=reduce_double_slashes(site_url().'/');?>';
     </script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
 	<script type="text/javascript" src="<?=base_url('assets/admin/fancybox/jquery.fancybox.pack.js');?>"></script>
