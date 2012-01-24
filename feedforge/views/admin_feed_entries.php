@@ -36,7 +36,7 @@ $fieldCount = count($fields);
 <div style='display: none;'>
     <form id='modify_feed_entries' class='fancy-form' action=''>
         <input type='hidden' id='feedid' name='feedid' disabled='true' value='<?=$feed['id'];?>'/>
-        <input type='hidden' id='entryid' name='entryid' disabled='true' value='0'/>
+        <input type='hidden' id='entryid' name='entryid' value='0'/>
 <?php for($i=0; $i < $fieldCount; $i++): ?>
         <p>
 			<label class='entry_label' for='<?=$fields[$i]['short'];?>'><?=$fields[$i]['title'];?>: </label>
