@@ -14,6 +14,7 @@ class Admin extends CI_Controller
         $this->load->model('feed_model');
         $this->load->model('variable_model');
         $this->load->helper('language');
+        $this->load->helper('string');
         $this->lang->load('admin');
     }
     

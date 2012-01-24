@@ -8,7 +8,7 @@ function refresh_feed_list(response)
 	var rows = '';
 	
 	for(var i=0; i < count; i++)
-		rows += '<tr><td class="center"><a href="#" title="Edit" onclick="return edit_feed('+feeds[i]['id']+', \''+feeds[i]['title']+'\')">(E)</a>&nbsp;&nbsp;<a href="'+SITE+'admin/delete_feed/'+feeds[i]['id']+'" title="Delete" onclick="return delete_feed('+feeds[i]['id']+');">(X)</a></td><td class="center">'+feeds[i]['id']+'</td><td>'+feeds[i]['title']+'</td><td>'+feeds[i]['short']+'</td><td><a href="'+SITE+'admin/feed_fields/'+feeds[i]['id']+'" title="Fields">(F)</a><br/><a class="green-text" href="'+SITE+'admin/feed_entries/'+feeds[i]['id']+'">View Entries &raquo;</a></td></tr>';
+		rows += '<tr><td class="center"><a href="#" title="Edit" onclick="return edit_feed('+feeds[i]['id']+', \''+feeds[i]['title']+'\')">(E)</a>&nbsp;&nbsp;<a href="'+SITE+'admin/delete_feed/'+feeds[i]['id']+'" title="Delete" onclick="return delete_feed('+feeds[i]['id']+');">(X)</a></td><td class="center">'+feeds[i]['id']+'</td><td>'+feeds[i]['title']+'</td><td>'+feeds[i]['short']+'</td><td><a href="'+SITE+'admin/feed_fields/'+feeds[i]['id']+'" title="Fields">View Fields &raquo;</a><br/><a class="green-text" href="'+SITE+'admin/feed_entries/'+feeds[i]['id']+'">View Entries &raquo;</a></td></tr>';
 	if(count == 0)rows += '<tr><td colspan="5">No Feeds Found</td></tr>';
 	
 	tbl.html(rows);

@@ -67,7 +67,7 @@ class Feed_model extends FF_Model
         
         $this->db->insert('ff_feed_field', array('feed_id'=>$feedid, 'short'=>$fieldshort, 'title'=>$title, 'feed_field_type_id'=>$typeid));
         $this->load->driver('field_type');
-        $this->dbforge->add_column($feedshort, array($fieldshort => $this->field_type->get_database_column_type()));
+        $this->dbforge->add_column($feedshort, array($fieldshort => $this->field_type->get_database_column_type($typeid)));
     }
     
     function update_feed_field($feedid, $fieldid, $title, $typeid)
