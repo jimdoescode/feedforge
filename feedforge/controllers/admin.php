@@ -127,7 +127,7 @@ class Admin extends CI_Controller
             if($feedid > 0)$this->feed_model->update_feed($feedid, $title);
             else $this->feed_model->create_feed($title);
         }
-        header('application/json');
+        header('Content-type: application/json');
         echo $this->_get_feed_data();
     }
 
@@ -136,7 +136,7 @@ class Admin extends CI_Controller
         if(!$this->_check_login())redirect('admin/login');
         $feedid = $this->input->post('id');
         $this->feed_model->delete_feed($feedid);
-        header('application/json');
+        header('Content-type: application/json');
         echo $this->_get_feed_data();
     }
 
@@ -171,7 +171,7 @@ class Admin extends CI_Controller
             if($fieldid > 0)$this->feed_model->update_feed_field($feedid, $fieldid, $title, $typeid);
             else $this->feed_model->add_feed_field($feedid, $title, $typeid);
         }
-        header('application/json');
+        header('Content-type: application/json');
         echo $this->_get_feed_field_data($feedid);
     }
 
@@ -180,7 +180,7 @@ class Admin extends CI_Controller
         if(!$this->_check_login())redirect('admin/login');
         $fieldid = $this->input->post('id');
         $this->feed_model->delete_feed_field($feedid, $fieldid);
-        header('application/json');
+        header('Content-type: application/json');
         echo $this->_get_feed_field_data($feedid);
     }
 
@@ -232,7 +232,7 @@ class Admin extends CI_Controller
         if($entryid > 0)$this->feed_model->update_feed_entry($feedid, $entryid, $values);
         else $this->feed_model->add_feed_entry($feedid, $values);
 
-        header('application/json');
+        header('Content-type: application/json');
         echo $this->_get_feed_entries($feedid);
     }
 
@@ -241,7 +241,7 @@ class Admin extends CI_Controller
         if(!$this->_check_login())redirect('admin/login');
         $entryid = $this->input->post('id');
         $this->feed_model->delete_feed_entry($feedid, $entryid);
-        header('application/json');
+        header('Content-type: application/json');
         echo $this->_get_feed_entries($feedid);
     }
 
@@ -272,7 +272,7 @@ class Admin extends CI_Controller
             if($id > 0)$this->variable_model->update_variable($id, $title, $value);
             else $this->variable_model->add_variable($title, $value);
         }
-        header('application/json');
+        header('Content-type: application/json');
         echo $this->_get_variable_data();
     }
 
@@ -281,7 +281,7 @@ class Admin extends CI_Controller
         if(!$this->_check_login())redirect('admin/login');
         $id = $this->input->post('id');
         $this->variable_model->delete_variable($id);
-        header('application/json');
+        header('Content-type: application/json');
         echo $this->_get_variable_data();
     }
 }
