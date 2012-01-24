@@ -183,8 +183,7 @@ class FF_Parser extends CI_Parser
                             {
                                 $replacement = $val;
                                 if(array_key_exists($key, $types))$replacement = $this->ci->field_type->{$types[$key]}->display_tag_value($val, $tagpairdata[$key][$j][1]);
-
-                                $template = str_replace($tagpairdata[$key][$j][2], $replacement, $template);
+                                if(!empty($tagpairdata[$key][$j][1]) && isset($tagpairdata[$key][$j][2]))$template = str_replace($tagpairdata[$key][$j][2], $replacement, $template);
                             }
                         }
                     }
@@ -260,8 +259,11 @@ class FF_Parser extends CI_Parser
             else $tagarray[$starttags[1][$i]] = array(array($starttags[0][$i], array()));
 
             preg_match($reg, $internal, $pairdata);
-            $tagarray[$starttags[1][$i]][$i][1]['internal'] = $pairdata[1];
-            $tagarray[$starttags[1][$i]][$i][2] = $pairdata[0];
+            if(!empty($pairdata))
+            {
+                $tagarray[$starttags[1][$i]][$i][1]['internal'] = $pairdata[1];
+                $tagarray[$starttags[1][$i]][$i][2] = $pairdata[0];
+            }
         }
         return $tagarray;
     }
