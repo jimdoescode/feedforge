@@ -36,13 +36,31 @@ define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
+error_log(print_r($_SERVER, true));
 //Attempt to determine the correct base url to resolve to.
 $base_url = (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on') ? 'https' : 'http';
 $base_url .= isset($_SERVER['HTTP_HOST']) ? "://{$_SERVER['HTTP_HOST']}" : '://localhost';
-$base_url .= isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
-$base_url .= substr($base_url, -1) == '/' ? '' : '/';
+if(isset($_SERVER['REDIRECT_URL']))
+{
+    $base_url .= $_SERVER['REDIRECT_URL'];
+    if(isset($_SERVER['REDIRECT_QUERY_STRING']))$base_url = substr($base_url, 0, strpos($base_url, $_SERVER['REDIRECT_QUERY_STRING']));
+}
+elseif(isset($_SERVER['REQUEST_URI']))
+{
+    $uri = substr($_SERVER['REQUEST_URI'], -1) == '/' ? $_SERVER['REQUEST_URI'] : $_SERVER['REQUEST_URI'].'/';
+    $script = substr($_SERVER['SCRIPT_NAME'], -9) == 'index.php' ? substr($_SERVER['SCRIPT_NAME'], 0, -9) : $_SERVER['SCRIPT_NAME'];
+    error_log($uri);
+    if($uri != $script && strpos($uri, $script) === 0)$uri = substr($uri, 0, strlen($script));
+    error_log($uri);
+    $base_url .= $uri;
+
+    unset($script);
+    unset($uri);
+}
+if(substr($base_url, -9) == 'index.php')$base_url = substr($base_url, 0, strlen($base_url)-9); //If we end in index.php remove it
+$base_url .= substr($base_url, -1) != '/' ? '/' : ''; //If we don't end in a slash add one.
+error_log($base_url);
 //Remove trailing index.php if it is there.
-if(stripos($base_url, 'index.php'))$base_url = substr($base_url, 0, stripos($base_url, 'index.php'));
 
 define('BASE_URL', $base_url);
 unset($base_url);
