@@ -12,7 +12,7 @@ class FF_Parser extends CI_Parser
         $this->ci->load->library('scache');
     }
     
-    function parse_template($path, $globals = false)
+    function parse_template($path, $globals = false, $input = false)
     {
         //Build the full path to the template and make sure it exists.
         $fullpath = TEMPPATH.$path.EXT;
@@ -24,12 +24,15 @@ class FF_Parser extends CI_Parser
             if($globals === false)$globals = array();
             //Get the initial file.
             $template = $this->ci->load->file($fullpath, true);
-            //Fill in any global variables from a merge call
-            $template = $this->_parse_paths($template);
             //Fill in any templates that are merged into this one
             $template = $this->_parse_merges($template, $globals);
+            //Merge input with globals be careful to NOT
+            //overwrite the globals array with input data.
+            if(is_array($input))$globals = array_merge($input, $globals);
             //Fill in any standard global variables.
             $template = $this->_parse_globals($template, $globals);
+            //Fill in any path variables
+            $template = $this->_parse_paths($template);
             //Fill in any feed data
             $template = $this->_parse_feeds($template);
             //Check for any cache tags and create a cache if they exist.
@@ -183,7 +186,8 @@ class FF_Parser extends CI_Parser
                             {
                                 $replacement = $val;
                                 if(array_key_exists($key, $types))$replacement = $this->ci->field_type->{$types[$key]}->display_tag_value($val, $tagpairdata[$key][$j][1]);
-                                if(!empty($tagpairdata[$key][$j][1]) && isset($tagpairdata[$key][$j][2]))$template = str_replace($tagpairdata[$key][$j][2], $replacement, $template);
+
+                                $template = str_replace($tagpairdata[$key][$j][2], $replacement, $template);
                             }
                         }
                     }
@@ -259,11 +263,8 @@ class FF_Parser extends CI_Parser
             else $tagarray[$starttags[1][$i]] = array(array($starttags[0][$i], array()));
 
             preg_match($reg, $internal, $pairdata);
-            if(!empty($pairdata))
-            {
-                $tagarray[$starttags[1][$i]][$i][1]['internal'] = $pairdata[1];
-                $tagarray[$starttags[1][$i]][$i][2] = $pairdata[0];
-            }
+            $tagarray[$starttags[1][$i]][$i][1]['internal'] = $pairdata[1];
+            $tagarray[$starttags[1][$i]][$i][2] = $pairdata[0];
         }
         return $tagarray;
     }
