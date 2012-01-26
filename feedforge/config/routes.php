@@ -43,6 +43,7 @@ $route['404_override'] = '';
 
 $route['admin'] = 'admin';
 $route['admin/(:any)'] = 'admin/$1';
+$route['module/(:any)'] = 'module/$1';
 $route[':any'] = 'template/execute';
 
 /* End of file routes.php */
